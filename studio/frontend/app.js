@@ -476,7 +476,7 @@ function renderPublished() {
     groups[g].push(v);
   });
 
-  const folderLabels={'studio':'Studio renders','2.21_publish':'Feb 21 batch','2.21':'Feb 21 archive'};
+  const folderLabels={'studio':'Studio renders','2.21_publish':'Feb 21 · ready to post','2.21 archived':'Feb 21 · archived'};
   el.innerHTML=Object.entries(groups).map(([folder,vids])=>`
     <div class="folder-group">
       <div class="folder-label">

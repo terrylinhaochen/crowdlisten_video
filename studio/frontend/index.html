@@ -28,18 +28,32 @@
       <div id="create-landing" class="create-landing">
         <div class="create-hero">
           <h1 class="create-title">What do you want to<br>create today?</h1>
+          <p class="create-subtitle">Pick a format to get started</p>
         </div>
 
-        <div class="landing-bar">
-          <input type="text" id="landing-input" class="landing-input"
-            placeholder="Office clip about bad sprint planning…"
-            onkeydown="if(event.key==='Enter')handleLandingSubmit()"/>
-          <button class="landing-submit" onclick="handleLandingSubmit()">→</button>
-        </div>
-
-        <div class="quick-chips">
-          <button class="quick-chip" onclick="goToUpload()">🎭 Meme clip</button>
-          <button class="quick-chip" onclick="goToNarration()">🎙 Narration + CTA</button>
+        <div class="mode-cards">
+          <button class="mode-card" onclick="goToUpload()">
+            <div class="mode-card-icon">🎭</div>
+            <div class="mode-card-title">Meme Clip</div>
+            <div class="mode-card-desc">Pick a viral moment and drop a punchy caption over it. Quick, scroll-stopping, ready to post.</div>
+            <div class="mode-card-tags">
+              <span class="mode-tag">Caption overlay</span>
+              <span class="mode-tag">15–30s</span>
+              <span class="mode-tag">One clip</span>
+            </div>
+            <div class="mode-card-cta">Choose a clip →</div>
+          </button>
+          <button class="mode-card" onclick="goToNarration()">
+            <div class="mode-card-icon">🎙️</div>
+            <div class="mode-card-title">Narration + CTA</div>
+            <div class="mode-card-desc">Hook clip + voiceover story + branded CTA. Structured, persuasive, built to convert.</div>
+            <div class="mode-card-tags">
+              <span class="mode-tag">Voice narration</span>
+              <span class="mode-tag">TTS</span>
+              <span class="mode-tag">CrowdListen CTA</span>
+            </div>
+            <div class="mode-card-cta">Write narration →</div>
+          </button>
         </div>
       </div>
 

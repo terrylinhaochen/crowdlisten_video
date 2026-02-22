@@ -68,50 +68,50 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);
 /* STEP 0 — Landing */
 .create-landing{
   display:flex;flex-direction:column;align-items:center;
-  justify-content:center;gap:24px;
-  height:100%;overflow-y:auto;padding:40px 24px;
-  max-width:640px;margin:0 auto;width:100%;
+  justify-content:center;gap:36px;
+  height:100%;overflow-y:auto;padding:48px 32px;
+  max-width:860px;margin:0 auto;width:100%;
 }
 
 .create-hero{text-align:center}
 .create-title{
   font-size:36px;font-weight:700;color:var(--text);
-  line-height:1.2;letter-spacing:-.7px;margin-bottom:0;
+  line-height:1.2;letter-spacing:-.7px;margin-bottom:8px;
+}
+.create-subtitle{
+  font-size:15px;color:var(--text3);margin:0;
 }
 
-/* Input bar — mirrors CrowdListen LandingInputBar */
-.landing-bar{
-  display:flex;align-items:center;gap:0;width:100%;
+/* Mode cards */
+.mode-cards{
+  display:grid;grid-template-columns:1fr 1fr;gap:16px;width:100%;
+}
+.mode-card{
   background:var(--surface);border:1.5px solid var(--border);
-  border-radius:var(--r-xl);box-shadow:0 2px 12px rgba(0,0,0,0.06);
-  transition:box-shadow .2s,border-color .2s;overflow:hidden;
+  border-radius:var(--r-l);padding:32px 28px;
+  display:flex;flex-direction:column;align-items:flex-start;gap:14px;
+  cursor:pointer;text-align:left;font-family:inherit;color:var(--text);
+  transition:border-color .18s, box-shadow .18s, transform .18s;
+  box-shadow:0 2px 8px rgba(0,0,0,0.04);
 }
-.landing-bar:focus-within{
-  border-color:rgba(217,125,85,0.5);
-  box-shadow:0 4px 20px rgba(217,125,85,0.12);
+.mode-card:hover{
+  border-color:var(--coral);
+  box-shadow:0 10px 36px rgba(217,125,85,0.14);
+  transform:translateY(-3px);
 }
-.landing-input{
-  flex:1;background:transparent;border:none;outline:none;
-  padding:16px 20px;font-size:16px;color:var(--text);font-family:inherit;
+.mode-card-icon{font-size:44px;line-height:1}
+.mode-card-title{font-size:21px;font-weight:700;letter-spacing:-.3px;color:var(--text)}
+.mode-card-desc{font-size:14px;color:var(--text2);line-height:1.65}
+.mode-card-tags{display:flex;gap:6px;flex-wrap:wrap}
+.mode-tag{
+  background:var(--surface2);border:1px solid var(--border);
+  color:var(--text3);border-radius:var(--pill);
+  padding:3px 10px;font-size:11px;font-weight:500;
 }
-.landing-input::placeholder{color:var(--text3)}
-.landing-submit{
-  background:none;border:none;cursor:pointer;
-  width:44px;height:44px;margin:6px;border-radius:var(--r-m);
-  display:flex;align-items:center;justify-content:center;
-  font-size:18px;color:var(--text3);transition:all .15s;flex-shrink:0;
+.mode-card-cta{
+  margin-top:auto;padding-top:6px;
+  font-size:13px;font-weight:600;color:var(--coral);letter-spacing:-.1px;
 }
-.landing-submit:hover{background:var(--coral);color:#fff}
-
-/* Quick chips */
-.quick-chips{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
-.quick-chip{
-  background:var(--surface);border:1px solid var(--border);
-  color:var(--text2);border-radius:var(--r-xl);padding:8px 16px;
-  font-size:13px;font-family:inherit;cursor:pointer;transition:all .15s;
-}
-.quick-chip:hover{border-color:var(--coral);color:var(--text);background:var(--coral-bg)}
-.chip-upload:hover{border-color:var(--border2)}
 
 /* STEP 1a — Clip browser */
 .create-clips{

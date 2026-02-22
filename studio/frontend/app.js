@@ -215,6 +215,7 @@ function renderClipList() {
   if(!S.clips.length){el.innerHTML='<div class="empty-state">No clips match filters</div>';return;}
   el.innerHTML=S.clips.map(c=>{
     const active=S.selected?.clip_id===c.clip_id?' active':'';
+    const matchReason = c.match_reason ? `<div class="match-reason">${esc(c.match_reason)}</div>` : '';
     return `<div class="clip-card${active}" onclick="selectClip('${c.clip_id}')">
       <div class="cc-top">
         <span class="score-badge ${scoreClass(c.meme_score)}">${c.meme_score}</span>
@@ -223,6 +224,7 @@ function renderClipList() {
       </div>
       <div class="cc-caption">${esc(c.meme_caption)}</div>
       <div class="cc-visual">${esc(c.what_happens_visually)}</div>
+      ${matchReason}
     </div>`;
   }).join('');
 }
@@ -303,6 +305,32 @@ $('score-slider').addEventListener('input',function(){
   $('score-val').textContent=this.value;
   fetchClips();
 });
+
+// ── Smart Search ──────────────────────────────────────────────────
+
+async function smartSearch(topic) {
+  if(!topic.trim()) { fetchClips(); return; }
+  const el=$('clip-list');
+  el.innerHTML='<div class="loading-state">🔍 Searching...</div>';
+  try {
+    const data = await api('/api/smart-search', {
+      method: 'POST',
+      body: JSON.stringify({ topic: topic.trim(), limit: 10 })
+    });
+    S.clips = data.clips || [];
+    renderClipList();
+    const method = data.method === 'ai' ? '✨ AI' : '🔤 keyword';
+    toast(`Found ${S.clips.length} clips (${method})`, 'info');
+  } catch(e) {
+    el.innerHTML=`<div class="loading-state" style="color:var(--red)">${e.message}</div>`;
+    toast(`Search failed: ${e.message}`, 'error');
+  }
+}
+
+function handleSmartSearch() {
+  const input = $('smart-search-input');
+  if(input) smartSearch(input.value);
+}
 
 // ── Narration page ────────────────────────────────────────────────
 

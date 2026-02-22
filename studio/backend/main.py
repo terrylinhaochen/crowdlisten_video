@@ -13,6 +13,7 @@ from .config import (PUBLISHED_DIR, TMP_DIR, REVIEW_DIR, INBOX_DIR,
 from . import clips as clip_lib
 from . import queue as q
 from . import sse as sse_bus
+from .search import smart_search
 
 app = FastAPI(title="CrowdListen Studio")
 
@@ -58,6 +59,30 @@ def sync_library():
     clip_lib.invalidate_cache()
     clips = clip_lib.load_clips()
     return {"ok": True, "clip_count": len(clips)}
+
+
+@app.post("/api/smart-search")
+def smart_search_endpoint(body: dict):
+    """
+    Semantic clip search using OpenAI.
+    Body: {topic: str, limit: int = 5}
+    Returns: {topic, clips: [...with match_reason], method: "ai"|"keyword"}
+    """
+    topic = body.get("topic", "").strip()
+    limit = body.get("limit", 5)
+
+    if not topic:
+        raise HTTPException(400, "topic is required")
+
+    all_clips = clip_lib.load_clips()
+    results = smart_search(topic, all_clips, limit=limit)
+
+    # Determine method used (AI if match_reason doesn't start with "Contains:")
+    method = "keyword"
+    if results and not results[0].get("match_reason", "").startswith("Contains:"):
+        method = "ai"
+
+    return {"topic": topic, "clips": results, "method": method}
 
 
 @app.post("/api/batch")

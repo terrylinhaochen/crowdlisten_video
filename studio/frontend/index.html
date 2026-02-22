@@ -73,6 +73,10 @@
             <span class="score-label">Score ≥ <strong id="score-val">7</strong></span>
             <input type="range" id="score-slider" min="1" max="10" value="7"/>
           </div>
+          <div class="smart-search-row">
+            <input type="text" id="smart-search-input" class="smart-search-input" placeholder="AI: scope creep..." onkeydown="if(event.key==='Enter')handleSmartSearch()"/>
+            <button class="smart-search-btn" onclick="handleSmartSearch()" title="Smart search">🔍</button>
+          </div>
         </div>
         <div id="clip-list" class="clip-grid">
           <div class="loading-state">Loading clips…</div>

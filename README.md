@@ -4,6 +4,70 @@ Short-form video content for TikTok + Instagram. AI/PM/Eng audience.
 
 ---
 
+## How This Works
+
+This is a two-interface system. You can drive it visually (Studio web app) or conversationally (OpenClaw AI agent). Both talk to the same files and the same rendering pipeline.
+
+```
+You (chat or browser)
+        │
+        ├── OpenClaw (AI agent)          ← chat via Signal/Telegram/web
+        │     │  talks to you in natural language
+        │     │  reads/writes files, starts jobs, monitors status
+        │     │
+        └── Studio (web app)             ← open in browser at localhost:8000
+              │  visual clip browser, caption editor, queue + review
+              │
+              ▼
+        Studio API (FastAPI, port 8000)
+              │
+        ┌─────┴──────────────┐
+        │                    │
+   Clip library          Render pipeline
+   (Gemini JSON)         (ffmpeg)
+        │                    │
+   38 pre-analyzed       studio/review/     ← approve/reject here
+   moments from          studio/published/  ← final clips
+   Office + SV 1–3
+```
+
+### The pipeline, step by step
+
+**1. Source video** → drop an `.mp4` into `marketing_clips/`
+
+**2. Gemini analysis** → the Studio (or `scripts/analyze_video.py`) uploads the video to Gemini, which watches it and returns timestamped "meme moments" ranked by energy score. Output: `processing/*_visual_analysis.json`
+
+**3. Clip library** → the Studio reads those JSON files and shows 38 browsable clips with scores, captions, and visual descriptions. No re-analyzing needed unless you add a new source video.
+
+**4. Create** → pick a clip in Studio (or tell OpenClaw what you want), write a caption, choose Meme or Narration mode → hit Render
+
+**5. Render** → ffmpeg cuts the clip, burns in the caption, appends the branded CTA card. For Narration, it also runs TTS and assembles hook + voiceover + CTA. Output: `studio/review/`
+
+**6. Review → Publish** → Studio's Published tab shows all clips for approval. Approve → moves to `published/`. That's your posting queue.
+
+---
+
+## OpenClaw Integration
+
+**OpenClaw** is the AI agent that runs on your machine (same one you're chatting with). It has full access to this folder and the Studio API.
+
+**What OpenClaw can do right now:**
+- Start/stop the Studio server
+- Read and edit any file here — render scripts, clip data, captions, this README
+- Answer questions about the system ("what clips are ready?", "what's the meme score on clip X?")
+- Make changes you describe in plain English ("add a clip about scope creep to the render script")
+- Check what's in published/ vs review/ and give you a status summary
+
+**What's coming next (not built yet):**
+- `"Make me a clip about AI agents"` → OpenClaw searches the library by topic, picks best match, queues the render, notifies you when it's ready
+- Scheduled content drops — OpenClaw checks the calendar, renders a week's worth of clips overnight, asks for approval Monday morning
+- Auto-posting to TikTok/Instagram via their APIs
+- Analytics loop — track which clips perform, feed that back into clip selection
+
+**The mental model:** Studio is the GUI for when you want to see and click. OpenClaw is the LUI (language interface) for when you want to just say what you want. Right now OpenClaw is a smart assistant for this system. The goal is for it to run most of the pipeline autonomously with you just approving the output.
+
+---
+
 ## Studio — Visual Video Editor
 
 A local web app for creating meme clips and narration videos without touching the CLI.

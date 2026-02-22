@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CrowdListen Studio</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- Header -->
+    <header id="header">
+      <div class="header-left">
+        <span class="logo-text">CrowdListen <span class="logo-accent">Studio</span></span>
+      </div>
+      <div class="header-right">
+        <span id="header-status" class="status-dot"></span>
+        <span id="header-status-text" class="status-text">Ready</span>
+      </div>
+    </header>
+
+    <!-- Main layout -->
+    <div id="main">
+
+      <!-- Panel 1: Library -->
+      <aside id="panel-library">
+        <div class="panel-header">
+          <span>Clip Library</span>
+          <button class="icon-btn" id="refresh-btn" title="Refresh clips">↻</button>
+        </div>
+
+        <div class="filters">
+          <div class="source-pills" id="source-pills">
+            <button class="pill active" data-source="all">All</button>
+            <button class="pill" data-source="office">Office</button>
+            <button class="pill" data-source="sv1">SV1</button>
+            <button class="pill" data-source="sv2">SV2</button>
+            <button class="pill" data-source="sv3">SV3</button>
+          </div>
+          <div class="score-filter">
+            <label>Min score: <span id="score-val">7</span></label>
+            <input type="range" id="score-slider" min="1" max="10" value="7" />
+          </div>
+        </div>
+
+        <div id="clip-list" class="clip-list">
+          <div class="empty-state">Loading clips...</div>
+        </div>
+      </aside>
+
+      <!-- Panel 2: Composer -->
+      <main id="panel-composer">
+        <div class="panel-header">
+          <span>Composer</span>
+          <span id="composer-subtitle" class="panel-subtitle"></span>
+        </div>
+        <div id="composer-body">
+          <div class="empty-state composer-empty">
+            <div class="empty-icon">🎬</div>
+            <p>Select a clip from the library to get started</p>
+          </div>
+        </div>
+      </main>
+
+      <!-- Panel 3: Queue + Published -->
+      <aside id="panel-right">
+        <div class="panel-header">
+          <span>Render Queue</span>
+          <span id="queue-count" class="badge">0</span>
+        </div>
+        <div id="queue-list" class="queue-list"></div>
+
+        <div class="panel-header" style="margin-top:8px">
+          <span>Published</span>
+          <span id="daily-tracker" class="badge badge-green">0/2 today</span>
+        </div>
+        <div id="published-list" class="published-list"></div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- Video preview modal -->
+  <div id="video-modal" class="modal hidden">
+    <div class="modal-backdrop" id="modal-backdrop"></div>
+    <div class="modal-content">
+      <button class="modal-close" id="modal-close">✕</button>
+      <video id="modal-video" controls autoplay playsinline></video>
+    </div>
+  </div>
+
+  <!-- Toast container -->
+  <div id="toast-container"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

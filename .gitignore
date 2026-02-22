@@ -6,6 +6,7 @@ marketing_clips/
 reels_output/
 published/
 studio/tmp/
+crowdlisten_demos/
 
 # Python
 __pycache__/

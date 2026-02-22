@@ -4,6 +4,36 @@ Short-form video content for TikTok + Instagram. AI/PM/Eng audience.
 
 ---
 
+## Studio — Visual Video Editor
+
+A local web app for creating meme clips and narration videos without touching the CLI.
+
+**Start it:**
+```bash
+cd studio && ./start.sh
+# → http://localhost:8000
+```
+
+### Landing — pick your format
+
+![Landing page](studio/docs/screenshot-landing.png)
+
+Two modes: **Meme Clip** (caption overlay + branded CTA) or **Narration + CTA** (hook clip + voiceover + call to action).
+
+### Clip Browser — pick the moment
+
+![Clip browser](studio/docs/screenshot-clips.png)
+
+38 clips pre-analyzed by Gemini from The Office + Silicon Valley 1–3. Filter by source, score threshold. Or upload a new video and Gemini extracts the best moments automatically.
+
+### Composer — write the caption and render
+
+![Composer](studio/docs/screenshot-composer.png)
+
+Caption auto-filled from Gemini's analysis. Edit, rename, hit Render → clip lands in the Queue tab for review.
+
+---
+
 ## Folder Structure
 
 ```

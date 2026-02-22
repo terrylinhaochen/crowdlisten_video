@@ -84,9 +84,15 @@ function connectSSE() {
   });
   es.addEventListener('intake', e => {
     const d=JSON.parse(e.data);
-    if(d.status==='done'){toast(`Analysis done: ${d.filename} — clips added!`,'success');fetchClips();}
-    if(d.status==='failed') toast(`Analysis failed: ${d.filename}`,'error');
-    $('upload-status').textContent = d.status==='analyzing'?`Analyzing ${d.filename}…`:d.status==='done'?'':'';
+    if(d.status==='done'){
+      fetchClips();
+      goToClips('meme');
+      toast(`${d.filename} analyzed — clips ready!`,'success');
+    }
+    if(d.status==='failed'){
+      showOnly('create-upload');
+      toast(`Analysis failed: ${d.filename}`,'error');
+    }
   });
   es.onerror=()=>setTimeout(connectSSE,3000);
 }
@@ -94,7 +100,7 @@ function connectSSE() {
 // ── Landing routing ───────────────────────────────────────────────
 
 function showOnly(id) {
-  ['create-landing','create-upload','create-clips','narration-page','composer-view']
+  ['create-landing','create-upload','create-analyzing','create-clips','narration-page','composer-view']
     .forEach(x => $(x).classList.toggle('hidden', x!==id));
 }
 
@@ -349,13 +355,17 @@ function handleFileSelect(input) {
 
 async function uploadFile(file) {
   if(!file.type.startsWith('video/')){toast('Please upload a video file','error');return;}
-  $('upload-status').textContent=`Uploading ${file.name}…`;
+  showOnly('create-analyzing');
+  $('analyzing-title').textContent = `Uploading ${file.name}…`;
+  $('analyzing-sub').textContent = 'Transferring your file to the server';
+  $('analyzing-hint').textContent = 'Gemini will then extract the best meme moments scene by scene';
   const fd=new FormData();fd.append('file',file);
   try {
     await fetch('/api/intake',{method:'POST',body:fd});
-    $('upload-status').textContent=`Analyzing…`;
-    toast(`Uploaded ${file.name}. Gemini is analyzing…`,'info');
-  } catch(e){$('upload-status').textContent='';toast(`Upload failed: ${e.message}`,'error');}
+    $('analyzing-title').textContent = 'Gemini is analyzing your video…';
+    $('analyzing-sub').textContent = `Scanning ${file.name} scene by scene`;
+    $('analyzing-hint').textContent = 'Extracting the highest-energy meme moments — almost there';
+  } catch(e){showOnly('create-upload');toast(`Upload failed: ${e.message}`,'error');}
 }
 
 // ── Queue tab ─────────────────────────────────────────────────────

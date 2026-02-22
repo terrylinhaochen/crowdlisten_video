@@ -189,6 +189,33 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);
 }
 .browse-library-btn:hover{color:var(--coral)}
 
+/* STEP 1b-loading — Analyzing state */
+.create-analyzing{
+  display:flex;align-items:center;justify-content:center;
+  height:100%;width:100%;padding:40px 24px;
+}
+.analyzing-inner{
+  display:flex;flex-direction:column;align-items:center;
+  gap:16px;text-align:center;max-width:440px;
+}
+.analyzing-spinner{
+  width:48px;height:48px;border-radius:50%;
+  border:3px solid var(--border);border-top-color:var(--coral);
+  animation:spin 0.9s linear infinite;flex-shrink:0;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.analyzing-title{
+  font-size:22px;font-weight:700;color:var(--text);
+  letter-spacing:-.3px;margin:0;
+}
+.analyzing-sub{font-size:15px;color:var(--text2);margin:0}
+.analyzing-hint{font-size:13px;color:var(--text3);margin:0}
+.analyzing-eta{
+  margin-top:8px;font-size:12px;color:var(--text3);
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:var(--pill);padding:6px 16px;
+}
+
 /* STEP 1c — Narration page */
 .narration-page{
   display:flex;flex-direction:column;width:100%;height:100%;overflow:hidden;

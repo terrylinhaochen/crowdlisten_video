@@ -86,6 +86,7 @@ function connectSSE() {
   es.addEventListener('intake', e => {
     const d=JSON.parse(e.data);
     if(d.status==='done'){
+      await api('/api/sync',{method:'POST'});
       fetchClips();
       goToClips('meme');
       toast(`${d.filename} analyzed — clips ready!`,'success');
@@ -141,7 +142,8 @@ function pickHookClip() {
 async function fetchHooks() {
   try {
     const data = await api('/api/clips?min_score=8');
-    renderHookLibrary(data.clips || []);
+    const clips = data.clips || data || [];
+    renderHookLibrary(clips);
   } catch(e) {
     $('hook-library-list').innerHTML = '<div class="hook-lib-loading">Failed to load clips</div>';
   }
@@ -193,7 +195,8 @@ async function fetchClips() {
   const p=new URLSearchParams({min_score:S.filters.minScore});
   if(S.filters.source!=='all') p.set('source',S.filters.source);
   try {
-    let clips=await api(`/api/clips?${p}`);
+    const data=await api(`/api/clips?${p}`);
+    let clips=data.clips||data;  // handle both {clips:[]} and bare array
     if(S.filters.query) {
       const q=S.filters.query.toLowerCase();
       clips=clips.filter(c=>
@@ -538,6 +541,19 @@ function renderPublished() {
           </div>`).join('')}
       </div>
     </div>`).join('');
+}
+
+async function syncLibrary() {
+  const btn=document.querySelector('.sync-btn');
+  if(btn){btn.style.opacity='.4';btn.style.pointerEvents='none';}
+  try {
+    const r=await api('/api/sync',{method:'POST'});
+    await fetchClips();
+    await fetchSources();
+    await fetchPublished();
+    toast(`Library synced — ${r.clip_count} clips`,'success');
+  } catch(e){toast('Sync failed','error');}
+  finally{if(btn){btn.style.opacity='';btn.style.pointerEvents='';}}
 }
 
 async function fetchSources() {

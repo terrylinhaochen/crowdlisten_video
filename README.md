@@ -49,22 +49,50 @@ You (chat or browser)
 
 ## OpenClaw Integration
 
-**OpenClaw** is the AI agent that runs on your machine (same one you're chatting with). It has full access to this folder and the Studio API.
+**OpenClaw** (#1, the AI agent) runs on your machine and treats the Studio as its content library and workflow engine.
 
-**What OpenClaw can do right now:**
-- Start/stop the Studio server
-- Read and edit any file here — render scripts, clip data, captions, this README
-- Answer questions about the system ("what clips are ready?", "what's the meme score on clip X?")
-- Make changes you describe in plain English ("add a clip about scope creep to the render script")
-- Check what's in published/ vs review/ and give you a status summary
+### The mental model
 
-**What's coming next (not built yet):**
-- `"Make me a clip about AI agents"` → OpenClaw searches the library by topic, picks best match, queues the render, notifies you when it's ready
-- Scheduled content drops — OpenClaw checks the calendar, renders a week's worth of clips overnight, asks for approval Monday morning
-- Auto-posting to TikTok/Instagram via their APIs
-- Analytics loop — track which clips perform, feed that back into clip selection
+```
+Studio GUI                        OpenClaw (LUI)
+──────────────────────────────    ────────────────────────────────
+Visual clip library               "Make a clip about scope creep"
+Workflow SOP (meme / narration)   Searches library, picks best match
+Content display (published/)      Queues render via /api/batch
+Review + approve                  Monitors queue, notifies when ready
+Sync button (⟳)                   Can run entire pipeline unattended
+```
 
-**The mental model:** Studio is the GUI for when you want to see and click. OpenClaw is the LUI (language interface) for when you want to just say what you want. Right now OpenClaw is a smart assistant for this system. The goal is for it to run most of the pipeline autonomously with you just approving the output.
+**Studio = the SOP.** It defines the two workflows, the clip library, the caption rules, the CTA config. OpenClaw reads and executes that SOP.
+
+**OpenClaw = the operator.** It can pick clips by topic, run batch renders, check what's published, and report status — all from a chat message.
+
+### What OpenClaw can do right now
+
+```
+"What clips do we have about AI agents?"
+→ searches library, returns top 3 with scores + captions
+
+"Make a clip about scope creep"
+→ picks best match, queues render, notifies when done
+
+"Make a week of content"
+→ picks 5 clips, POST /api/batch, monitors queue
+
+"What's ready to post?"
+→ checks /api/published and /api/review, gives a summary
+
+"Sync the library"
+→ POST /api/sync — reloads clips from disk instantly
+```
+
+### What's coming next
+
+- Auto-post to TikTok/Instagram via their APIs
+- Content calendar — OpenClaw schedules and queues automatically
+- Analytics loop — track performance, feed back into clip selection
+
+Full API reference for OpenClaw → `STUDIO.md` in the workspace.
 
 ---
 
@@ -193,31 +221,8 @@ cp reels_output/v7/CLIP_NAME.mp4 published/
 
 ---
 
-## Current State (v6, Feb 2026)
+## What's In The Library
 
-11 clips in `published/` — all selected via Gemini visual analysis:
+38 clips total from The Office + Silicon Valley 1–3 — all analyzed by Gemini. Browse and filter by score in the Studio. Published clips live in `published/` and are visible in the Studio Published tab, grouped by batch.
 
-| File | Source | Caption |
-|---|---|---|
-| `01_pm_managing_a_sev1_at_3am` | The Office | PM managing a Sev-1 at 3am |
-| `02_your_hotfix_breaks_prod_even_worse` | The Office | your hotfix breaks prod even worse |
-| `03_ceo_during_the_all_hands_layoff_call` | The Office | CEO during the all-hands layoff call |
-| `04_stakeholder_10_mins_before_the_demo` ⭐ | The Office | stakeholder 10 minutes before the demo |
-| `04_the_stakeholder_who_has_no_capacity` | The Office | the stakeholder who always has 'no capacity' this sprint |
-| `05_ceo_seeing_the_ai_demo_we_built_for_3_months` | SV1 | CEO seeing the AI demo we built for 3 months |
-| `06_our_ceo_explaining_why_the_layoffs_are_good_actually` | SV1 | our CEO explaining why the layoffs are good actually |
-| `07_pm_adding_one_more_thing_to_the_sprint` | SV2 | PM adding one more thing to the sprint |
-| `08_me_opening_slack_after_a_3day_weekend` | SV2 | me opening Slack after a 3-day weekend |
-| `09_debugging_the_ai_agent_at_2am` ⭐ | SV3 | debugging the AI agent at 2am |
-| `10_our_codebase_after_ai_had_unsupervised_access` | SV3 | our codebase after the AI had unsupervised access all weekend |
-
----
-
-## Posting Order (Feb 2026)
-1. `09_debugging_the_ai_agent_at_2am` — robot deer kick, pure visual, instant
-2. `04_stakeholder_10_mins_before_the_demo` — 7s, devastating
-3. `06_our_ceo_explaining_why_why_layoffs_are_good` — room recoil shot
-4. `01_pm_managing_a_sev1_at_3am` — fire drill chaos, relatable
-5. Space the rest 3-4x/week
-
-Don't explain the joke. Ever.
+For current clip details, open the Studio → clip browser. Source of truth is there, not this file.

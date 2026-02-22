@@ -49,7 +49,47 @@ async def events():
 
 @app.get("/api/clips")
 def list_clips(source: str | None = None, min_score: int = 0):
-    return clip_lib.load_clips(source=source, min_score=min_score)
+    return {"clips": clip_lib.load_clips(source=source, min_score=min_score)}
+
+
+@app.post("/api/sync")
+def sync_library():
+    """Force reload of clip library from disk (instant — no re-analysis)."""
+    clip_lib.invalidate_cache()
+    clips = clip_lib.load_clips()
+    return {"ok": True, "clip_count": len(clips)}
+
+
+@app.post("/api/batch")
+def batch_render(jobs: list[dict]):
+    """
+    Queue multiple render jobs at once.
+    Each job: {clip_id, caption, mode, output_name, [body_script, voice]}
+    Returns list of job ids.
+    """
+    from . import queue as q_lib
+    results = []
+    for job_spec in jobs:
+        clip_id = job_spec.get("clip_id")
+        clip = clip_lib.get_clip(clip_id)
+        if not clip:
+            results.append({"clip_id": clip_id, "error": "clip not found"})
+            continue
+        job = {
+            "mode":          job_spec.get("mode", "meme"),
+            "output_name":   job_spec.get("output_name") or clip_id,
+            "source_file":   clip["source_file"],
+            "start_sec":     clip["start_seconds"],
+            "duration_sec":  clip["duration_seconds"],
+            "hook_caption":  job_spec.get("caption") or clip["meme_caption"],
+            "hook_clip_id":  clip_id,
+        }
+        if job["mode"] == "narration":
+            job["body_script"] = job_spec.get("body_script", "")
+            job["voice"]       = job_spec.get("voice", "shimmer")
+        job_id = q_lib.enqueue(job)
+        results.append({"clip_id": clip_id, "job_id": job_id, "output_name": job["output_name"]})
+    return {"queued": len([r for r in results if "job_id" in r]), "results": results}
 
 
 @app.get("/api/clips/{clip_id}")

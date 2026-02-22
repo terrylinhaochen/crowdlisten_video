@@ -49,6 +49,8 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);
   transition:all .15s;white-space:nowrap;font-family:inherit}
 .nav-link:hover{color:var(--text);background:var(--surface2)}
 .nav-link.active{color:var(--text);background:var(--surface2);font-weight:600}
+.sync-btn{font-size:16px;opacity:.6;transition:opacity .15s,transform .3s}
+.sync-btn:hover{opacity:1;transform:rotate(180deg)}
 .upload-status{font-size:12px;color:var(--text2);max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
 /* ── Main ────────────────────────────────────────────────────────── */

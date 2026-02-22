@@ -2,7 +2,7 @@
 
 const S = {
   tab: 'create',
-  clips: [], filters: { source: 'all', minScore: 7 },
+  clips: [], filters: { source: 'all', minScore: 7, query: '' },
   selected: null,
   videoType: 'meme',
   ttsAudio: null,
@@ -89,13 +89,55 @@ function connectSSE() {
   es.onerror=()=>setTimeout(connectSSE,3000);
 }
 
+// ── Landing routing ───────────────────────────────────────────────
+
+function handleLandingSubmit() {
+  const q=$('landing-input').value.trim();
+  if(!q || q.toLowerCase().includes('upload')) { goToUpload(); return; }
+  S.filters.query=q;
+  goToClips();
+}
+
+function goToClips(mode) {
+  if(mode) { S.videoType=mode; }
+  $('create-landing').classList.add('hidden');
+  $('create-upload').classList.add('hidden');
+  $('create-clips').classList.remove('hidden');
+  $('composer-view').classList.add('hidden');
+  fetchClips();
+}
+
+function goToUpload() {
+  $('create-landing').classList.add('hidden');
+  $('create-clips').classList.add('hidden');
+  $('create-upload').classList.remove('hidden');
+  $('composer-view').classList.add('hidden');
+}
+
+function goToLanding() {
+  $('create-landing').classList.remove('hidden');
+  $('create-clips').classList.add('hidden');
+  $('create-upload').classList.add('hidden');
+  $('composer-view').classList.add('hidden');
+  S.selected=null; S.filters.query='';
+}
+
 // ── Clips ─────────────────────────────────────────────────────────
 
 async function fetchClips() {
   const p=new URLSearchParams({min_score:S.filters.minScore});
   if(S.filters.source!=='all') p.set('source',S.filters.source);
   try {
-    S.clips=await api(`/api/clips?${p}`);
+    let clips=await api(`/api/clips?${p}`);
+    if(S.filters.query) {
+      const q=S.filters.query.toLowerCase();
+      clips=clips.filter(c=>
+        (c.meme_caption||'').toLowerCase().includes(q)||
+        (c.what_happens_visually||'').toLowerCase().includes(q)||
+        (c.source_label||'').toLowerCase().includes(q)
+      );
+    }
+    S.clips=clips;
     renderClipList();
   } catch(e) {$('clip-list').innerHTML=`<div class="loading-state" style="color:var(--red)">${e.message}</div>`;}
 }
@@ -129,12 +171,12 @@ function clearClipSelection() {
   S.ttsAudio=null;
   renderClipList();
   $('composer-view').classList.add('hidden');
-  $('create-home').classList.remove('hidden');
+  $('create-clips').classList.remove('hidden');
 }
 
 function showComposer() {
   const c=S.selected;
-  $('create-home').classList.add('hidden');
+  $('create-clips').classList.add('hidden');
   $('composer-view').classList.remove('hidden');
 
   // Strip

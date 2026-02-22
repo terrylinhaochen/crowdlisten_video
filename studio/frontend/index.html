@@ -12,7 +12,7 @@
   <!-- Header -->
   <header id="header">
     <span class="logo">CrowdListen <span class="logo-accent">Studio</span></span>
-    <nav class="tabs" id="tabs">
+    <nav class="tabs">
       <button class="tab active" data-tab="create">Create</button>
       <button class="tab" data-tab="queue">Queue <span id="queue-badge" class="tab-badge hidden">0</span></button>
       <button class="tab" data-tab="published">Published <span id="pub-badge" class="tab-badge hidden">0</span></button>
@@ -27,53 +27,64 @@
     <!-- ── CREATE TAB ─────────────────────────────────────────────── -->
     <div id="tab-create" class="tab-page active">
 
-      <!-- STEP 1: Home / Clip picker -->
-      <div id="create-home" class="create-home">
-
+      <!-- STEP 0: Landing input bar -->
+      <div id="create-landing" class="create-landing">
         <div class="create-hero">
           <h1 class="create-title">What do you want to<br>create today?</h1>
-          <p class="create-sub">Pick a clip from The Office or Silicon Valley, write a caption or narration, and hit render.</p>
         </div>
 
-        <!-- Clip picker card -->
-        <div class="clip-picker-card">
-          <div class="clip-picker-header">
-            <div class="source-pills" id="source-pills">
-              <button class="pill active" data-source="all">All</button>
-              <button class="pill" data-source="office">The Office</button>
-              <button class="pill" data-source="sv1">SV 1</button>
-              <button class="pill" data-source="sv2">SV 2</button>
-              <button class="pill" data-source="sv3">SV 3</button>
-            </div>
-            <div class="score-row">
-              <span class="score-label">Score ≥ <strong id="score-val">7</strong></span>
-              <input type="range" id="score-slider" min="1" max="10" value="7"/>
-            </div>
-          </div>
-          <div id="clip-list" class="clip-grid">
-            <div class="loading-state">Loading clips…</div>
-          </div>
+        <div class="landing-bar">
+          <input type="text" id="landing-input" class="landing-input"
+            placeholder="Office clip about bad sprint planning…"
+            onkeydown="if(event.key==='Enter')handleLandingSubmit()"/>
+          <button class="landing-submit" onclick="handleLandingSubmit()">→</button>
         </div>
 
-        <!-- or divider -->
-        <div class="or-divider"><span>or</span></div>
+        <div class="quick-chips">
+          <button class="quick-chip" onclick="goToClips('meme')">🎭 Meme clip</button>
+          <button class="quick-chip" onclick="goToClips('narration')">🎙 Narration + CTA</button>
+          <button class="quick-chip chip-upload" onclick="goToUpload()">⬆ Upload new video</button>
+        </div>
+      </div>
 
-        <!-- Upload card -->
-        <button class="upload-card" onclick="document.getElementById('file-input').click()">
-          <span class="upload-card-icon">＋</span>
-          <div class="upload-card-text">
-            <span class="upload-card-label">Upload new video</span>
-            <span class="upload-card-hint">Gemini will analyze and extract clips automatically</span>
+      <!-- STEP 1a: Clip browser -->
+      <div id="create-clips" class="create-clips hidden">
+        <div class="clips-header">
+          <button class="back-btn" onclick="goToLanding()">← Back</button>
+          <div class="source-pills" id="source-pills">
+            <button class="pill active" data-source="all">All</button>
+            <button class="pill" data-source="office">The Office</button>
+            <button class="pill" data-source="sv1">SV 1</button>
+            <button class="pill" data-source="sv2">SV 2</button>
+            <button class="pill" data-source="sv3">SV 3</button>
           </div>
-        </button>
+          <div class="score-row">
+            <span class="score-label">Score ≥ <strong id="score-val">7</strong></span>
+            <input type="range" id="score-slider" min="1" max="10" value="7"/>
+          </div>
+        </div>
+        <div id="clip-list" class="clip-grid">
+          <div class="loading-state">Loading clips…</div>
+        </div>
+      </div>
+
+      <!-- STEP 1b: Upload -->
+      <div id="create-upload" class="create-upload hidden">
+        <button class="back-btn" onclick="goToLanding()" style="align-self:flex-start">← Back</button>
+        <div class="upload-drop-zone" id="upload-drop"
+          onclick="document.getElementById('file-input').click()"
+          ondragover="event.preventDefault()"
+          ondrop="event.preventDefault();uploadFile(event.dataTransfer.files[0])">
+          <div class="upload-drop-icon">⬆</div>
+          <div class="upload-drop-label">Drop a video here, or click to browse</div>
+          <div class="upload-drop-hint">Gemini will analyze and extract clips automatically</div>
+        </div>
         <input type="file" id="file-input" accept="video/*" style="display:none" onchange="handleFileSelect(this)"/>
-
-      </div><!-- /create-home -->
+      </div>
 
       <!-- STEP 2: Composer -->
       <div id="composer-view" class="composer-view hidden">
 
-        <!-- Clip summary strip -->
         <div id="clip-strip" class="clip-strip">
           <div class="clip-strip-thumb" id="strip-thumb" onclick="openPreviewModal()">
             <span id="strip-emoji">🏢</span>
@@ -91,13 +102,11 @@
           <button class="strip-change" onclick="clearClipSelection()">← All clips</button>
         </div>
 
-        <!-- Video type toggle -->
         <div class="type-toggle">
           <button class="type-btn active" data-type="meme" onclick="setType('meme')">🎭 Meme</button>
           <button class="type-btn" data-type="narration" onclick="setType('narration')">🎙 Narration + CTA</button>
         </div>
 
-        <!-- MEME fields -->
         <div id="fields-meme" class="compose-fields">
           <div class="field-group">
             <label>Caption <span class="hint">— burned into the clip</span></label>
@@ -105,7 +114,6 @@
           </div>
         </div>
 
-        <!-- NARRATION fields -->
         <div id="fields-narration" class="compose-fields hidden">
           <div class="field-group">
             <label>Hook caption</label>
@@ -114,7 +122,7 @@
           <div class="field-group">
             <label>Narration script <span class="hint" id="word-count-hint"></span></label>
             <textarea id="narr-script" rows="5"
-              placeholder="Write 15–25 seconds of narration here. This plays over a dark background after the hook clip…"
+              placeholder="Write 15–25 seconds of narration here…"
               oninput="updateWordCount()"></textarea>
           </div>
           <div class="tts-row">
@@ -146,7 +154,6 @@
           </div>
         </div>
 
-        <!-- Render bar -->
         <div class="render-bar">
           <input type="text" id="output-name" class="output-input" placeholder="output-filename (auto-filled)"/>
           <button class="btn btn-primary btn-render" id="render-btn" onclick="submitRender()">
@@ -177,16 +184,12 @@
     <!-- ── PUBLISHED TAB ──────────────────────────────────────────── -->
     <div id="tab-published" class="tab-page">
       <div class="published-page">
-
-        <!-- Pending review -->
         <div id="review-section" class="review-section hidden">
           <div class="section-header-row">
             <h3 class="section-title">Needs review <span id="review-count" class="count-badge">0</span></h3>
           </div>
           <div id="review-grid" class="video-grid"></div>
         </div>
-
-        <!-- Published -->
         <div class="section-header-row">
           <h3 class="section-title">Published</h3>
           <span id="daily-tracker" class="daily-tracker">0 / 2 today</span>

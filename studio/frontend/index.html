@@ -11,356 +11,228 @@
 
   <!-- Header -->
   <header id="header">
-    <span class="logo" onclick="goToLanding()" style="cursor:pointer">CrowdListen <span class="logo-accent">Studio</span></span>
+    <span class="logo" onclick="gotoStep(1)" style="cursor:pointer">CrowdListen <span class="logo-accent">Studio</span></span>
     <div class="header-right">
-      <span id="upload-status" class="upload-status"></span>
-      <button class="nav-link sync-btn" onclick="syncLibrary()" title="Sync library from disk">⟳</button>
-      <button class="nav-link" data-tab="calendar" onclick="switchTab('calendar')">Calendar</button>
-      <button class="nav-link" data-tab="queue" onclick="switchTab('queue')">Queue <span id="queue-badge" class="tab-badge hidden">0</span></button>
-      <button class="nav-link" data-tab="published" onclick="switchTab('published')">Published <span id="pub-badge" class="tab-badge hidden">0</span></button>
+      <button class="nav-link" data-tab="create" onclick="switchTab('create')">Create</button>
+      <button class="nav-link" data-tab="published" onclick="switchTab('published')">Published</button>
     </div>
   </header>
 
   <div id="main">
 
-    <!-- ── CREATE TAB ─────────────────────────────────────────────── -->
+    <!-- ── CREATE TAB ───────────────────────────────────────────── -->
     <div id="tab-create" class="tab-page active">
 
-      <!-- STEP 0: Landing -->
-      <div id="create-landing" class="create-landing">
-        <div class="create-hero">
-          <h1 class="create-title">What do you want to<br>create today?</h1>
-          <p class="create-subtitle">Pick a format to get started</p>
+      <!-- Progress bar -->
+      <div id="step-bar" class="step-bar">
+        <div class="step-item active" data-step="1" onclick="gotoStep(1)">
+          <span class="step-num">1</span><span class="step-label">Upload</span>
         </div>
-
-        <div class="mode-cards">
-          <button class="mode-card" onclick="goToUpload()">
-            <div class="mode-card-icon">🎭</div>
-            <div class="mode-card-title">Meme Clip</div>
-            <div class="mode-card-desc">Pick a viral moment, drop a punchy caption, and close with a branded CTA. Quick, scroll-stopping, ready to post.</div>
-            <div class="mode-card-tags">
-              <span class="mode-tag">Caption overlay</span>
-              <span class="mode-tag">15–30s</span>
-              <span class="mode-tag">CrowdListen CTA</span>
-            </div>
-            <div class="mode-card-cta">Choose a clip →</div>
-          </button>
-          <button class="mode-card" onclick="goToNarration()">
-            <div class="mode-card-icon">🎙️</div>
-            <div class="mode-card-title">Narration + CTA</div>
-            <div class="mode-card-desc">Hook clip + voiceover story + branded CTA. Structured, persuasive, built to convert.</div>
-            <div class="mode-card-tags">
-              <span class="mode-tag">Voice narration</span>
-              <span class="mode-tag">TTS</span>
-              <span class="mode-tag">CrowdListen CTA</span>
-            </div>
-            <div class="mode-card-cta">Write narration →</div>
-          </button>
+        <div class="step-divider"></div>
+        <div class="step-item" data-step="2">
+          <span class="step-num">2</span><span class="step-label">Options</span>
+        </div>
+        <div class="step-divider"></div>
+        <div class="step-item" data-step="3">
+          <span class="step-num">3</span><span class="step-label">Process</span>
+        </div>
+        <div class="step-divider"></div>
+        <div class="step-item" data-step="4">
+          <span class="step-num">4</span><span class="step-label">Library</span>
         </div>
       </div>
 
-      <!-- STEP 1a: Clip browser (Meme flow + hook clip picker for Narration) -->
-      <div id="create-clips" class="create-clips hidden">
-        <div class="clips-header">
-          <button class="back-btn" id="clips-back-btn" onclick="handleClipsBack()">← Back</button>
-          <div class="source-pills" id="source-pills">
-            <button class="pill active" data-source="all">All</button>
-            <button class="pill" data-source="office">The Office</button>
-            <button class="pill" data-source="sv1">SV 1</button>
-            <button class="pill" data-source="sv2">SV 2</button>
-            <button class="pill" data-source="sv3">SV 3</button>
+      <!-- STEP 1: Upload -->
+      <div id="step-1" class="step-page">
+        <div class="step-hero">
+          <h1>Upload a video</h1>
+          <p>Drop any source video — we'll extract the best clip moments automatically.</p>
+        </div>
+        <div id="drop-zone" class="drop-zone"
+             onclick="document.getElementById('file-input').click()"
+             ondragover="handleDragOver(event)"
+             ondragleave="handleDragLeave(event)"
+             ondrop="handleDrop(event)">
+          <div class="drop-icon">🎬</div>
+          <div class="drop-label">Drop video here or <span class="drop-link">click to browse</span></div>
+          <div class="drop-hint">MP4, MOV, AVI, MKV · up to 2GB</div>
+          <input id="file-input" type="file" accept=".mp4,.mov,.avi,.mkv" style="display:none" onchange="handleFileSelect(event)"/>
+        </div>
+        <div id="upload-progress" class="upload-progress hidden">
+          <div class="progress-label" id="upload-label">Uploading…</div>
+          <div class="progress-bar"><div class="progress-fill" id="upload-fill" style="width:0%"></div></div>
+        </div>
+      </div>
+
+      <!-- STEP 2: Options -->
+      <div id="step-2" class="step-page hidden">
+        <div class="step-hero">
+          <h1>What kind of clips?</h1>
+          <p>Choose your formats and processing options.</p>
+        </div>
+
+        <div class="options-grid">
+
+          <!-- Clip Types -->
+          <div class="option-section">
+            <div class="option-section-title">Clip Type</div>
+            <div class="type-cards">
+              <label class="type-card selected" id="type-meme">
+                <input type="checkbox" name="clip_type" value="meme" checked hidden/>
+                <span class="type-icon">🎭</span>
+                <span class="type-name">Meme Clips</span>
+                <span class="type-desc">Funny/relatable moments · punchy 2-line caption · 10–30s</span>
+              </label>
+              <label class="type-card" id="type-quote">
+                <input type="checkbox" name="clip_type" value="quote" hidden/>
+                <span class="type-icon">🗣️</span>
+                <span class="type-name">Speaker Quotes</span>
+                <span class="type-desc">Quotable insights · clean text overlay · 10–45s</span>
+              </label>
+            </div>
           </div>
-          <div class="score-row">
-            <span class="score-label">Score ≥ <strong id="score-val">7</strong></span>
-            <input type="range" id="score-slider" min="1" max="10" value="7"/>
+
+          <!-- Add-ons -->
+          <div class="option-section">
+            <div class="option-section-title">Add-ons</div>
+            <label class="toggle-row">
+              <input type="checkbox" id="opt-narration"/>
+              <span class="toggle-track"><span class="toggle-thumb"></span></span>
+              <span class="toggle-label">🎙️ Narrated CTA — append TTS voiceover + CrowdListen branding</span>
+            </label>
           </div>
-          <div class="smart-search-row">
-            <input type="text" id="smart-search-input" class="smart-search-input" placeholder="AI: scope creep..." onkeydown="if(event.key==='Enter')handleSmartSearch()"/>
-            <button class="smart-search-btn" onclick="handleSmartSearch()" title="Smart search">🔍</button>
+
+          <!-- Count + Audience -->
+          <div class="option-section two-col">
+            <div>
+              <div class="option-section-title">Clip count</div>
+              <div class="count-row">
+                <input type="range" id="opt-count" min="5" max="20" value="10" oninput="document.getElementById('count-val').textContent=this.value"/>
+                <span id="count-val" class="count-val">10</span>
+              </div>
+            </div>
+            <div>
+              <div class="option-section-title">Target audience</div>
+              <input type="text" id="opt-audience" class="text-input"
+                     value="engineers, PMs, and the broader AI community"
+                     placeholder="e.g. engineers, PMs, founders"/>
+            </div>
+          </div>
+
+          <!-- Ad Placement -->
+          <div class="option-section">
+            <div class="option-section-title">Ad Placement</div>
+            <label class="toggle-row" style="margin-bottom:12px">
+              <input type="checkbox" id="opt-ads" onchange="toggleAdOptions(this.checked)"/>
+              <span class="toggle-track"><span class="toggle-thumb"></span></span>
+              <span class="toggle-label">Enable ad insertion</span>
+            </label>
+            <div id="ad-options" class="ad-options hidden">
+              <div class="ad-row">
+                <label class="ad-label">Ad asset</label>
+                <div class="ad-asset-row">
+                  <select id="ad-asset-select" class="select-input">
+                    <option value="">— upload or select —</option>
+                  </select>
+                  <button class="btn-small" onclick="document.getElementById('ad-file-input').click()">Upload</button>
+                  <input id="ad-file-input" type="file" accept=".mp4,.mov,.jpg,.jpeg,.png,.webp" style="display:none" onchange="uploadAdAsset(event)"/>
+                </div>
+              </div>
+              <div class="ad-row">
+                <label class="ad-label">Placement</label>
+                <select id="ad-placement" class="select-input" onchange="toggleAdFrequency(this.value)">
+                  <option value="end">End only</option>
+                  <option value="between">Between clips</option>
+                  <option value="both">Both</option>
+                </select>
+              </div>
+              <div class="ad-row" id="ad-frequency-row" style="display:none">
+                <label class="ad-label">Frequency</label>
+                <div class="count-row">
+                  <input type="range" id="ad-frequency" min="1" max="5" value="2"
+                         oninput="document.getElementById('freq-val').textContent='Every '+this.value+' clips'"/>
+                  <span id="freq-val" class="count-val">Every 2 clips</span>
+                </div>
+              </div>
+              <div class="ad-row">
+                <label class="ad-label">Image duration (s)</label>
+                <input type="number" id="ad-img-duration" class="text-input" value="5" min="3" max="30" style="width:80px"/>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="step-actions">
+          <button class="btn-secondary" onclick="gotoStep(1)">← Back</button>
+          <button class="btn-primary" onclick="startPipeline()">Process Video →</button>
+        </div>
+      </div>
+
+      <!-- STEP 3: Processing -->
+      <div id="step-3" class="step-page hidden">
+        <div class="step-hero">
+          <h1>Processing your video</h1>
+          <p id="processing-filename" class="processing-filename"></p>
+        </div>
+        <div class="pipeline-steps">
+          <div class="pipeline-step" id="ps-audio">
+            <span class="ps-icon">🎵</span>
+            <span class="ps-label">Extract audio</span>
+            <span class="ps-status" id="pss-audio">⏳</span>
+          </div>
+          <div class="pipeline-step" id="ps-transcribe">
+            <span class="ps-icon">📝</span>
+            <span class="ps-label">Transcribe (Whisper)</span>
+            <span class="ps-status" id="pss-transcribe">–</span>
+          </div>
+          <div class="pipeline-step" id="ps-detect">
+            <span class="ps-icon">🔍</span>
+            <span class="ps-label">Detect clip candidates</span>
+            <span class="ps-status" id="pss-detect">–</span>
+          </div>
+          <div class="pipeline-step" id="ps-render">
+            <span class="ps-icon">🎬</span>
+            <span class="ps-label">Render clips</span>
+            <span class="ps-status" id="pss-render">–</span>
           </div>
         </div>
-        <div id="clip-list" class="clip-grid">
+        <div class="pipeline-progress">
+          <div class="progress-bar"><div class="progress-fill" id="pipeline-fill" style="width:0%"></div></div>
+          <p id="pipeline-msg" class="pipeline-msg">Starting…</p>
+        </div>
+      </div>
+
+      <!-- STEP 4: Library -->
+      <div id="step-4" class="step-page hidden">
+        <div class="library-header">
+          <h1>Select clips to publish</h1>
+          <div class="library-actions">
+            <span id="selected-count" class="selected-count">0 selected</span>
+            <button class="btn-primary" id="save-btn" onclick="saveSelected()" disabled>Save Selected →</button>
+          </div>
+        </div>
+        <div id="library-grid" class="library-grid">
           <div class="loading-state">Loading clips…</div>
         </div>
       </div>
 
-      <!-- STEP 1b: Upload (Meme flow) -->
-      <div id="create-upload" class="create-upload hidden">
-        <button class="back-btn" onclick="goToLanding()" style="align-self:flex-start">← Back</button>
-        <div class="upload-hero">
-          <h2 class="upload-title">🎭 Meme clip</h2>
-          <p class="upload-sub">Upload a video — Gemini extracts the best moments automatically</p>
-        </div>
-        <div class="upload-drop-zone"
-          onclick="document.getElementById('file-input').click()"
-          ondragover="event.preventDefault()"
-          ondrop="event.preventDefault();uploadFile(event.dataTransfer.files[0])">
-          <div class="upload-drop-icon">⬆</div>
-          <div class="upload-drop-label">Drop a video here, or click to browse</div>
-          <div class="upload-drop-hint">MP4, MOV · Gemini analyzes scene by scene · clips appear in the library</div>
-        </div>
-        <div class="or-divider"><span>or</span></div>
-        <button class="browse-library-btn" onclick="goToClips('meme')">
-          Browse 38 existing clips from The Office &amp; Silicon Valley →
-        </button>
-        <div class="sources-panel">
-          <div class="sources-title">Source videos</div>
-          <div id="sources-list" class="sources-list">
-            <div class="source-empty">Loading…</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- STEP 1b-loading: Analyzing state -->
-      <div id="create-analyzing" class="create-analyzing hidden">
-        <div class="analyzing-inner">
-          <div class="analyzing-spinner"></div>
-          <h2 class="analyzing-title" id="analyzing-title">Uploading video…</h2>
-          <p class="analyzing-sub" id="analyzing-sub">Transferring your file to the server</p>
-          <p class="analyzing-hint" id="analyzing-hint">Gemini will then extract the best meme moments scene by scene</p>
-          <div class="analyzing-eta">Usually takes 1–3 minutes · you'll be taken to the clips automatically</div>
-        </div>
-      </div>
-
-      <!-- STEP 1c: Narration / script page -->
-      <div id="narration-page" class="narration-page hidden">
-
-        <div class="narration-header">
-          <button class="back-btn" onclick="goToLanding()">← Back</button>
-          <span class="narration-title">🎙 Narration + CTA</span>
-          <button class="btn btn-primary btn-render" id="narr-render-btn" onclick="submitNarration()">
-            🚀 Render
-          </button>
-        </div>
-
-        <div class="narration-body">
-
-          <!-- Left: Script + voice -->
-          <div class="narration-left">
-
-            <div class="narr-section">
-              <div class="narr-section-label">Script <span class="hint" id="narr-word-count"></span></div>
-              <textarea id="narr-script" class="narr-script-input" rows="8"
-                placeholder="Write your narration here. Aim for 15–25 seconds — that's about 40–65 words.&#10;&#10;This plays over a dark background after the hook clip."
-                oninput="updateNarrWordCount()"></textarea>
-            </div>
-
-            <div class="narr-row">
-              <div class="narr-section" style="flex:1">
-                <div class="narr-section-label">Voice</div>
-                <select id="narr-voice-select">
-                  <optgroup label="OpenAI">
-                    <option value="shimmer">shimmer</option>
-                    <option value="alloy">alloy</option>
-                    <option value="echo">echo</option>
-                    <option value="nova">nova</option>
-                    <option value="fable">fable</option>
-                    <option value="onyx">onyx</option>
-                  </optgroup>
-                  <optgroup label="ElevenLabs">
-                    <option value="Rachel">Rachel</option>
-                    <option value="Bella">Bella</option>
-                    <option value="Adam">Adam</option>
-                  </optgroup>
-                </select>
-              </div>
-              <button class="btn btn-secondary" id="narr-tts-btn" onclick="generateNarrTTS()" style="align-self:flex-end">
-                🎤 Generate voice
-              </button>
-            </div>
-
-            <div id="narr-audio-preview" class="audio-preview hidden"></div>
-
-            <div class="cta-pill">
-              📣 Auto-appended · <strong>Try CrowdListen now</strong> — the PM for AI Agents · crowdlisten.com
-            </div>
-
-            <div class="narr-section">
-              <div class="narr-section-label">Output filename</div>
-              <input type="text" id="narr-output-name" placeholder="auto-filled from script"/>
-            </div>
-
-          </div>
-
-          <!-- Right: Hook clip -->
-          <div class="narration-right">
-            <div class="narr-section-label">Hook clip <span class="hint">— opens the video, then cuts to narration</span></div>
-
-            <!-- Selected state -->
-            <div id="hook-selected" class="hook-selected hidden">
-              <video id="hook-preview-video" class="hook-preview-video" muted preload="metadata" loop></video>
-              <div class="hook-info">
-                <div class="hook-top">
-                  <span id="hook-source" class="source-tag"></span>
-                  <span id="hook-score" class="score-badge"></span>
-                  <span id="hook-ts" class="strip-ts"></span>
-                </div>
-                <div id="hook-caption-text" class="hook-caption-text"></div>
-              </div>
-            </div>
-
-            <!-- Hook library (auto-populated, score ≥ 8) -->
-            <div class="hook-library">
-              <div id="hook-library-list" class="hook-library-list">
-                <div class="hook-lib-loading">Loading…</div>
-              </div>
-              <button class="hook-browse-all" onclick="pickHookClip()">Browse all clips →</button>
-            </div>
-
-            <!-- Hook caption -->
-            <div id="hook-caption-group" class="narr-section hidden">
-              <div class="narr-section-label">Hook caption</div>
-              <textarea id="narr-hook-caption" rows="2" placeholder="Caption shown over the hook clip…"></textarea>
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-      <!-- STEP 2: Meme composer (after clip selected from meme flow) -->
-      <div id="composer-view" class="composer-view hidden">
-
-        <div id="clip-strip" class="clip-strip">
-          <div class="clip-strip-thumb" id="strip-thumb" onclick="openPreviewModal()">
-            <span id="strip-emoji">🏢</span>
-            <span class="strip-play">▶</span>
-          </div>
-          <div class="clip-strip-info">
-            <div class="strip-top">
-              <span id="strip-source" class="source-tag"></span>
-              <span id="strip-score" class="score-badge"></span>
-              <span id="strip-ts" class="strip-ts"></span>
-              <span id="strip-dur" class="strip-dur"></span>
-            </div>
-            <div id="strip-visual" class="strip-visual"></div>
-          </div>
-          <button class="strip-change" onclick="clearClipSelection()">← All clips</button>
-        </div>
-
-        <div class="compose-fields">
-          <div class="field-group">
-            <label>Caption <span class="hint">— burned into the clip</span></label>
-            <textarea id="meme-caption" rows="3" placeholder="When your PM adds one more thing to the sprint…"></textarea>
-          </div>
-        </div>
-
-        <div class="render-bar">
-          <input type="text" id="output-name" class="output-input" placeholder="output-filename (auto-filled)"/>
-          <button class="btn btn-primary btn-render" id="render-btn" onclick="submitRender()">
-            🚀 Render
-          </button>
-        </div>
-
-      </div><!-- /composer-view -->
-
-      <!-- Hidden file input for upload -->
-      <input type="file" id="file-input" accept="video/*" style="display:none" onchange="handleFileSelect(this)"/>
-
     </div><!-- /tab-create -->
 
-    <!-- ── QUEUE TAB ───────────────────────────────────────────────── -->
-    <div id="tab-queue" class="tab-page">
-      <div class="queue-page">
-        <div class="queue-active-section">
-          <h3 class="section-title">Rendering now</h3>
-          <div id="active-tasks" class="active-tasks">
-            <div class="empty-state">Nothing rendering</div>
-          </div>
-        </div>
-        <div class="queue-history-section">
-          <h3 class="section-title">Recent jobs</h3>
-          <div id="queue-history" class="queue-history"></div>
-        </div>
+    <!-- ── PUBLISHED TAB ─────────────────────────────────────────── -->
+    <div id="tab-published" class="tab-page hidden">
+      <div class="pub-header">
+        <h1>Published</h1>
+        <button class="btn-small" onclick="loadPublished()">Refresh</button>
+      </div>
+      <div id="published-grid" class="library-grid">
+        <div class="loading-state">Loading…</div>
       </div>
     </div>
 
-    <!-- ── PUBLISHED TAB ──────────────────────────────────────────── -->
-    <div id="tab-published" class="tab-page">
-      <div class="published-page">
-        <div id="pub-stats" class="pub-stats">
-          <div class="stat-card"><div class="stat-num" id="stat-total">0</div><div class="stat-label">Total clips</div></div>
-          <div class="stat-card"><div class="stat-num" id="stat-week">0</div><div class="stat-label">This week</div></div>
-          <div class="stat-card"><div class="stat-num" id="stat-today">0</div><div class="stat-label">Today</div></div>
-        </div>
-        <div id="review-section" class="review-section hidden">
-          <div class="section-header-row">
-            <h3 class="section-title">Needs review <span id="review-count" class="count-badge">0</span></h3>
-          </div>
-          <div id="review-grid" class="video-grid"></div>
-        </div>
-        <div class="section-header-row">
-          <h3 class="section-title">Published</h3>
-          <span id="daily-tracker" class="daily-tracker">0 / 2 today</span>
-        </div>
-        <div id="published-grid" class="video-grid">
-          <div class="empty-state">No published videos yet</div>
-        </div>
-      </div>
-    </div>
+  </div><!-- /main -->
+</div><!-- /app -->
 
-    <!-- ── CALENDAR TAB ──────────────────────────────────────────────── -->
-    <div id="tab-calendar" class="tab-page">
-      <div class="calendar-page">
-        <div class="section-header-row">
-          <h3 class="section-title">Content Calendar</h3>
-          <button class="btn btn-primary btn-sm" id="add-topic-btn" onclick="toggleCalendarForm()">+ Add topic</button>
-        </div>
-
-        <!-- Inline add form (hidden by default) -->
-        <div id="calendar-add-form" class="calendar-add-form hidden">
-          <input type="text" id="cal-topic-input" class="cal-input" placeholder="Topic or content idea..."/>
-          <input type="date" id="cal-date-input" class="cal-input cal-date-input"/>
-          <button class="btn btn-primary btn-sm" onclick="addCalendarEntry()">Save</button>
-          <button class="btn btn-secondary btn-sm" onclick="toggleCalendarForm()">Cancel</button>
-        </div>
-
-        <!-- Calendar entries table -->
-        <div id="calendar-list" class="calendar-list">
-          <div class="empty-state">No topics scheduled yet</div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<!-- Video modal -->
-<div id="video-modal" class="modal hidden">
-  <div class="modal-backdrop" id="modal-backdrop"></div>
-  <div class="modal-inner">
-    <button class="modal-close" id="modal-close">✕</button>
-    <video id="modal-video" controls autoplay playsinline></video>
-    <div id="modal-actions" class="modal-actions hidden">
-      <button class="btn btn-success" id="modal-approve">✓ Publish</button>
-      <button class="btn btn-danger" id="modal-reject">✕ Reject</button>
-    </div>
-  </div>
-</div>
-
-<!-- Post modal -->
-<div id="post-modal" class="post-modal hidden">
-  <div class="post-modal-backdrop" onclick="closePostModal()"></div>
-  <div class="post-modal-inner">
-    <div class="post-modal-title">Post to...</div>
-    <div class="post-modal-buttons">
-      <button class="post-modal-btn" onclick="doPost('tiktok')">
-        <span class="platform-icon">🎵</span>
-        <span>TikTok</span>
-      </button>
-      <button class="post-modal-btn" onclick="doPost('instagram')">
-        <span class="platform-icon">📷</span>
-        <span>Instagram</span>
-      </button>
-      <button class="post-modal-btn" onclick="doPost('both')">
-        <span class="platform-icon">🚀</span>
-        <span>Both platforms</span>
-      </button>
-    </div>
-    <button class="post-modal-cancel" onclick="closePostModal()">Cancel</button>
-  </div>
-</div>
-
-<div id="toast-container"></div>
 <script src="app.js"></script>
 </body>
 </html>

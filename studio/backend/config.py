@@ -20,11 +20,15 @@ TMP_DIR             = BASE_DIR / "studio" / "tmp"
 REVIEW_DIR          = BASE_DIR / "studio" / "review"
 INBOX_DIR           = BASE_DIR / "studio" / "inbox"
 QUEUE_FILE          = BASE_DIR / "studio" / "queue.json"
+# v2 pipeline dirs
+UPLOADS_DIR         = BASE_DIR / "studio" / "uploads"
+LIBRARY_DIR         = BASE_DIR / "studio" / "library"
+ADS_DIR             = BASE_DIR / "studio" / "ads"
 
 CTA_TAGLINE_DEFAULT = "Try CrowdListen now"
 CTA_SUBTITLE        = "the PM for AI Agents"
 CTA_URL             = "crowdlisten.com"
 
 # Ensure runtime dirs exist
-for d in [TMP_DIR, REVIEW_DIR, INBOX_DIR, PUBLISHED_DIR]:
+for d in [TMP_DIR, REVIEW_DIR, INBOX_DIR, PUBLISHED_DIR, UPLOADS_DIR, LIBRARY_DIR, ADS_DIR]:
     d.mkdir(parents=True, exist_ok=True)

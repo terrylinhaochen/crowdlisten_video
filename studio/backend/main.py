@@ -1,6 +1,8 @@
 import shutil
+import uuid
 from datetime import datetime, timezone, date
 from pathlib import Path
+from typing import List, Optional
 
 from fastapi import FastAPI, HTTPException, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
@@ -9,13 +11,15 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 from .config import (PUBLISHED_DIR, TMP_DIR, REVIEW_DIR, INBOX_DIR,
-                     MARKETING_CLIPS_DIR, CTA_TAGLINE_DEFAULT, CTA_SUBTITLE, CTA_URL)
+                     MARKETING_CLIPS_DIR, CTA_TAGLINE_DEFAULT, CTA_SUBTITLE, CTA_URL,
+                     UPLOADS_DIR, LIBRARY_DIR, ADS_DIR, PROCESSING_DIR)
 from . import clips as clip_lib
 from . import queue as q
 from . import sse as sse_bus
 from .search import smart_search
 from . import calendar_api as cal
 from . import publish as publish_lib
+from . import pipeline as pipeline_lib
 
 app = FastAPI(title="CrowdListen Studio")
 
@@ -372,6 +376,17 @@ def list_published():
     return {"videos": videos, "today_count": today_count, "week_count": week_count, "daily_target": 2}
 
 
+@app.delete("/api/published/{rel_path:path}")
+def delete_published(rel_path: str):
+    path = (PUBLISHED_DIR / rel_path).resolve()
+    if not str(path).startswith(str(PUBLISHED_DIR.resolve())):
+        raise HTTPException(403, "Forbidden")
+    if not path.exists():
+        raise HTTPException(404, "Not found")
+    path.unlink()
+    return {"ok": True}
+
+
 @app.get("/api/published/{rel_path:path}")
 def serve_published(rel_path: str):
     path = (PUBLISHED_DIR / rel_path).resolve()
@@ -558,6 +573,154 @@ def queue_calendar_render(entry_id: str):
     cal.update_entry(entry_id, {"status": "rendering", "output_name": job["output_name"]})
 
     return {"ok": True, "job": job, "entry": cal.get_entry(entry_id)}
+
+
+# ── v2 Pipeline ──────────────────────────────────────────────────────────────
+
+@app.post("/api/upload")
+async def upload_video(file: UploadFile = File(...)):
+    """Upload a source video. Returns job_id for pipeline use."""
+    job_id = str(uuid.uuid4())[:8]
+    job_dir = UPLOADS_DIR / job_id
+    job_dir.mkdir(parents=True, exist_ok=True)
+    dest = job_dir / file.filename
+    with open(dest, "wb") as f:
+        content = await file.read()
+        f.write(content)
+    return {"job_id": job_id, "filename": file.filename, "path": str(dest)}
+
+
+class AdConfig(BaseModel):
+    enabled: bool = False
+    asset: Optional[str] = None          # filename in ADS_DIR
+    placement: str = "end"               # between | end | both
+    frequency: int = 2                   # every N clips (for between/both)
+    image_duration: int = 5              # seconds (if asset is image)
+
+
+class PipelineRequest(BaseModel):
+    job_id: str
+    clip_types: List[str] = ["meme"]     # meme | quote
+    add_narration: bool = False
+    count: int = 10
+    audience: str = "engineers, PMs, and the broader AI community"
+    ad_config: Optional[AdConfig] = None
+
+
+@app.post("/api/pipeline/start")
+def start_pipeline(req: PipelineRequest):
+    """Start the processing pipeline for a job."""
+    job_dir = UPLOADS_DIR / req.job_id
+    if not job_dir.exists():
+        raise HTTPException(404, "Job not found. Upload a video first.")
+    videos = list(job_dir.glob("*.mp4")) + list(job_dir.glob("*.mov")) + \
+             list(job_dir.glob("*.avi")) + list(job_dir.glob("*.mkv"))
+    if not videos:
+        raise HTTPException(400, "No video found for this job_id")
+    video_path = videos[0]
+
+    ad_cfg = req.ad_config.dict() if req.ad_config else None
+    if ad_cfg and ad_cfg.get("asset"):
+        ad_cfg["asset_path"] = str(ADS_DIR / ad_cfg["asset"])
+
+    pipeline_lib.start_pipeline(
+        job_id=req.job_id,
+        video_path=video_path,
+        clip_types=req.clip_types,
+        add_narration=req.add_narration,
+        count=req.count,
+        audience=req.audience,
+        ad_config=ad_cfg,
+    )
+    return {"ok": True, "job_id": req.job_id, "status": "started"}
+
+
+@app.get("/api/pipeline/{job_id}/status")
+def pipeline_status(job_id: str):
+    state = pipeline_lib.load_state(job_id)
+    if not state:
+        raise HTTPException(404, "Job not found")
+    return state
+
+
+@app.get("/api/library/{job_id}")
+def library_list(job_id: str):
+    lib_dir = LIBRARY_DIR / job_id
+    if not lib_dir.exists():
+        return {"clips": []}
+    state = pipeline_lib.load_state(job_id)
+    clips_meta = {c.get("output_file", ""): c for c in state.get("clips", [])}
+    clips = []
+    for f in sorted(lib_dir.glob("*.mp4")):
+        meta = clips_meta.get(f.name, {})
+        clips.append({
+            "filename": f.name,
+            "url": f"/api/library/{job_id}/video/{f.name}",
+            "type": meta.get("type", "meme"),
+            "score": meta.get("score", 0),
+            "caption": meta.get("caption") or meta.get("quote", ""),
+            "duration": meta.get("duration", 0),
+            "timestamp": meta.get("timestamp", 0),
+        })
+    return {"job_id": job_id, "clips": clips}
+
+
+@app.get("/api/library/{job_id}/video/{filename}")
+def library_video(job_id: str, filename: str):
+    path = LIBRARY_DIR / job_id / filename
+    if not path.exists():
+        raise HTTPException(404, "Clip not found")
+    return FileResponse(str(path), media_type="video/mp4")
+
+
+class SaveRequest(BaseModel):
+    clips: List[str]
+
+
+@app.post("/api/library/{job_id}/save")
+def library_save(job_id: str, req: SaveRequest):
+    """Save selected clips to published/YYYY-MM-DD/."""
+    lib_dir = LIBRARY_DIR / job_id
+    today = datetime.now().strftime("%Y-%m-%d")
+    pub_dir = PUBLISHED_DIR / today
+    pub_dir.mkdir(parents=True, exist_ok=True)
+    saved = []
+    for fname in req.clips:
+        src = lib_dir / fname
+        if src.exists():
+            dest = pub_dir / fname
+            shutil.copy2(src, dest)
+            saved.append(str(dest))
+    return {"ok": True, "saved": len(saved), "dest": str(pub_dir)}
+
+
+# ── Ad Assets ────────────────────────────────────────────────────────────────
+
+@app.post("/api/ads/upload")
+async def upload_ad(file: UploadFile = File(...)):
+    """Upload a reusable ad asset (mp4, jpg, png)."""
+    dest = ADS_DIR / file.filename
+    with open(dest, "wb") as f:
+        f.write(await file.read())
+    return {"ok": True, "filename": file.filename}
+
+
+@app.get("/api/ads")
+def list_ads():
+    assets = []
+    for f in sorted(ADS_DIR.iterdir()):
+        if f.suffix.lower() in (".mp4", ".mov", ".jpg", ".jpeg", ".png", ".webp"):
+            assets.append({"filename": f.name, "size": f.stat().st_size})
+    return {"ads": assets}
+
+
+@app.delete("/api/ads/{filename}")
+def delete_ad(filename: str):
+    path = ADS_DIR / filename
+    if not path.exists():
+        raise HTTPException(404, "Ad asset not found")
+    path.unlink()
+    return {"ok": True}
 
 
 # ── Static frontend ───────────────────────────────────────────────────────────

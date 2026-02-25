@@ -152,12 +152,9 @@ def build_vf(caption):
     block_h = len(lines) * lh
     block_y = max((VY - block_h) // 2, 24)
 
-    bottom_space = OH - VIDEO_BOT           # 656px below video
-    # Stack: logo, tagline, URL — centered in bottom area
-    cta_block_h  = LOGO_W + 16 + CTA_FS1 + 10 + CTA_FS2 + 10
-    cta_top      = VIDEO_BOT + (bottom_space - cta_block_h) // 2
-    logo_y       = cta_top
-    text_top     = logo_y + LOGO_W + 16
+    bottom_space = OH - VIDEO_BOT
+    cta_block_h  = CTA_FS1 + 10 + CTA_FS2 + 10
+    text_top     = VIDEO_BOT + (bottom_space - cta_block_h) // 2
 
     filters = [f"scale={OW}:-2", f"pad={OW}:{OH}:(ow-iw)/2:(oh-ih)/2:black"]
 
@@ -182,23 +179,16 @@ def build_vf(caption):
         f":x=(w-text_w)/2:y={text_top + CTA_FS1 + 10}"
     )
 
-    vf_chain = ",".join(filters)
-    filter_complex = (
-        f"[0:v]{vf_chain}[bg];"
-        f"[1:v]scale={LOGO_W}:-1[logo];"
-        f"[bg][logo]overlay=(W-w)/2:{logo_y}[v]"
-    )
-    return filter_complex
+    return ",".join(filters)
 
 
 def render(out_dir, name, src, start, dur, caption):
     out = os.path.join(out_dir, f"{name}.mp4")
     r = subprocess.run([
         "ffmpeg", "-y", "-i", src,
-        "-i", LOGO_PATH,
         "-ss", str(start), "-t", str(dur),
-        "-filter_complex", build_vf(caption),
-        "-map", "[v]", "-map", "0:a",
+        "-vf", build_vf(caption),
+        "-map", "0:v", "-map", "0:a",
         "-c:v", "libx264", "-crf", "20", "-preset", "fast",
         "-c:a", "aac", "-b:a", "128k", "-movflags", "+faststart", out,
     ], capture_output=True, text=True)

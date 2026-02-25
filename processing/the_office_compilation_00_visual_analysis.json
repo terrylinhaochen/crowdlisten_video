@@ -1,0 +1,110 @@
+{
+  "source_file": "the_office_compilation_00.mp4",
+  "model": "gemini-2.0-flash",
+  "clips": [
+    {
+      "rank": 1,
+      "timestamp": "00:50",
+      "start_seconds": 50,
+      "duration_seconds": 10,
+      "what_happens_visually": "Michael makes exaggerated eye contact while saying \"I'll kill you\". Toby looks concerned. Michael's eyes widen.",
+      "dialogue_hook": "I'll kill you.",
+      "meme_caption": "When the intern asks\nif you're using AI",
+      "news_hook": "DeepSeek",
+      "meme_score": 9,
+      "audience": "engineers",
+      "why_it_works": "The extreme close-up combined with the absurdly threatening line creates a perfect visual for startup anxieties."
+    },
+    {
+      "rank": 2,
+      "timestamp": "01:06",
+      "start_seconds": 66,
+      "duration_seconds": 13,
+      "what_happens_visually": "Toby opens a gift to find a rock with a post-it note saying \"Suck on this\". He looks confused and slightly hurt.",
+      "dialogue_hook": "Suck on this!",
+      "meme_caption": "POV: Your seed round\nterm sheet",
+      "news_hook": "YC",
+      "meme_score": 8,
+      "audience": "founders",
+      "why_it_works": "The juxtaposition of a gift with a rude message perfectly captures the painful reality of fundraising."
+    },
+    {
+      "rank": 3,
+      "timestamp": "02:22",
+      "start_seconds": 142,
+      "duration_seconds": 15,
+      "what_happens_visually": "Oscar explains that Ryan double-booked sales to inflate the website's performance. He then calls it \"fraud\".",
+      "dialogue_hook": "Which is what we refer to in the business as misleading the shareholders. Another good term is fraud.",
+      "meme_caption": "Doubling your metrics\nbefore the board meeting",
+      "news_hook": "vibe coding",
+      "meme_score": 7,
+      "audience": "founders",
+      "why_it_works": "The dry delivery of 'fraud' makes this a darkly funny commentary on startup pressure."
+    },
+    {
+      "rank": 4,
+      "timestamp": "03:16",
+      "start_seconds": 196,
+      "duration_seconds": 10,
+      "what_happens_visually": "Jim says \"Dwight, I'm really busy, I can't talk about this anymore.\" Dwight is seen removing a red wire from Jim's computer.",
+      "dialogue_hook": "Dwight I'm really busy, I can't talk about this anymore.",
+      "meme_caption": "When the engineer\nfinds your prod key",
+      "news_hook": "Cursor",
+      "meme_score": 7,
+      "audience": "engineers",
+      "why_it_works": "The escalating tension and Dwight's destructive actions are perfect for engineer humor."
+    },
+    {
+      "rank": 5,
+      "timestamp": "02:43",
+      "start_seconds": 163,
+      "duration_seconds": 13,
+      "what_happens_visually": "Pam asks Michael what his gift is for Toby. Michael pauses, then says \"Yes, I am.\"",
+      "dialogue_hook": "Your watch?\nYes, I am.",
+      "meme_caption": "Interviewer: Are you\nqualified for this role?",
+      "news_hook": "Claude",
+      "meme_score": 6,
+      "audience": "PMs",
+      "why_it_works": "The awkwardness and Michael's self-centeredness are relatable to the job search."
+    },
+    {
+      "rank": 6,
+      "timestamp": "04:14",
+      "start_seconds": 254,
+      "duration_seconds": 12,
+      "what_happens_visually": "Ryan holds up Michael's jeans and Pam says \"Who dry cleans jeans?\" then gives a speech about Michael loving how he looks in them.",
+      "dialogue_hook": "Who dry cleans jeans?\nMichael and his jeans...",
+      "meme_caption": "Me: We need to cut\nburn rate.\nAlso me: *dry cleans jeans*",
+      "news_hook": "DOGE",
+      "meme_score": 6,
+      "audience": "founders",
+      "why_it_works": "The absurdity of dry-cleaning jeans is a great metaphor for questionable startup spending."
+    },
+    {
+      "rank": 7,
+      "timestamp": "04:45",
+      "start_seconds": 285,
+      "duration_seconds": 15,
+      "what_happens_visually": "Kelly and Ryan announce their divorce. Andy is shocked and Ryan says \"We are getting divorced, Andy. This is such a raw time.\"",
+      "dialogue_hook": "We are getting divorced, Andy. This is such a raw time.",
+      "meme_caption": "When your co-founder\nquits 2 weeks before demo",
+      "news_hook": "product demo gone wrong",
+      "meme_score": 6,
+      "audience": "founders",
+      "why_it_works": "The melodramatic delivery makes this a funny way to highlight the pain of a co-founder leaving."
+    },
+    {
+      "rank": 8,
+      "timestamp": "05:53",
+      "start_seconds": 353,
+      "duration_seconds": 15,
+      "what_happens_visually": "Michael drives a van and Ryan is in the back. Michael honks the horn and yells \"Time to make the donuts!\" Ryan is annoyed.",
+      "dialogue_hook": "Time to make the donuts!",
+      "meme_caption": "Founder: We're pivoting!\nEngineer: Again??",
+      "news_hook": "sprint planning",
+      "meme_score": 5,
+      "audience": "engineers",
+      "why_it_works": "The chaotic energy and Ryan's deadpan expression are relatable to engineers dealing with constant changes."
+    }
+  ]
+}

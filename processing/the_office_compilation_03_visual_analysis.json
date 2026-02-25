@@ -1,0 +1,110 @@
+{
+  "source_file": "the_office_compilation_03.mp4",
+  "model": "gemini-2.0-flash",
+  "clips": [
+    {
+      "rank": 1,
+      "timestamp": "00:31",
+      "start_seconds": 31,
+      "duration_seconds": 9,
+      "what_happens_visually": "Dwight is on the phone looking serious, Jim looks over at him with confusion. Dwight says 'Yes, I would'.",
+      "dialogue_hook": "Yes, I would.",
+      "meme_caption": "When the recruiter asks if\nyou're willing to relocate",
+      "news_hook": null,
+      "meme_score": 9,
+      "audience": "engineers",
+      "why_it_works": "The deadpan delivery and Dwight's intense stare make this relatable to anyone who's had to make a big career decision."
+    },
+    {
+      "rank": 2,
+      "timestamp": "01:11",
+      "start_seconds": 71,
+      "duration_seconds": 12,
+      "what_happens_visually": "Pam looks over with a concerned look and asks 'What have you done?'",
+      "dialogue_hook": "What have you done?",
+      "meme_caption": "When you push to prod\nbut the deployment fails",
+      "news_hook": null,
+      "meme_score": 8,
+      "audience": "engineers",
+      "why_it_works": "The classic 'oh no' reaction shot combined with a relatable engineering mishap creates a shared moment of anxiety."
+    },
+    {
+      "rank": 3,
+      "timestamp": "01:41",
+      "start_seconds": 101,
+      "duration_seconds": 15,
+      "what_happens_visually": "Michael is telling a story. Pam prompts him to get to the good part. Michael says 'Revolving door - broken'",
+      "dialogue_hook": "Revolving door. Broken.",
+      "meme_caption": "My startup idea? \nReinventing the wheel. Broken.",
+      "news_hook": null,
+      "meme_score": 7,
+      "audience": "founders",
+      "why_it_works": "Michael's anticlimactic story is perfect for highlighting the absurdity of some startup pitches."
+    },
+    {
+      "rank": 4,
+      "timestamp": "02:30",
+      "start_seconds": 150,
+      "duration_seconds": 12,
+      "what_happens_visually": "Oscar says 'I love a good quitting story. It makes me feel like I have control over my own life. Gives me hope.'",
+      "dialogue_hook": "I love a good quitting story.  It makes me feel like I have control over my own life.  Gives me hope.",
+      "meme_caption": "Me reading layoff threads\nfor the dopamine hit",
+      "news_hook": null,
+      "meme_score": 8,
+      "audience": "PMs",
+      "why_it_works": "Oscar's confessional is a dark, yet honest, reflection of the anxieties in the tech job market."
+    },
+    {
+      "rank": 5,
+      "timestamp": "03:11",
+      "start_seconds": 191,
+      "duration_seconds": 12,
+      "what_happens_visually": "Dwight is shouting and enthusiastic. Jim is clapping but looks unenthusiastic. Michael is smiling and clapping.",
+      "dialogue_hook": "People, look alive! It's showtime!",
+      "meme_caption": "Me hyping up the team\nfor a product demo",
+      "news_hook": null,
+      "meme_score": 7,
+      "audience": "PMs",
+      "why_it_works": "The contrast between Dwight's energy and Jim's fake enthusiasm perfectly captures the forced excitement of product demos."
+    },
+    {
+      "rank": 6,
+      "timestamp": "03:57",
+      "start_seconds": 237,
+      "duration_seconds": 12,
+      "what_happens_visually": "Andy says 'He had a massive stroke of good fortune and he is now in a better place.'",
+      "dialogue_hook": "He had a massive stroke of good fortune and he is now in a better place.",
+      "meme_caption": "When you get laid off\nbut land a FAANG job",
+      "news_hook": null,
+      "meme_score": 7,
+      "audience": "engineers",
+      "why_it_works": "Andy's awkward phrasing is hilarious when applied to the context of layoffs and landing a better gig."
+    },
+    {
+      "rank": 7,
+      "timestamp": "04:40",
+      "start_seconds": 280,
+      "duration_seconds": 12,
+      "what_happens_visually": "Jim puts on Dwight's glasses and looks into the camera.",
+      "dialogue_hook": "Question: What kind of bear is best?",
+      "meme_caption": "POV: you vibe coded\nyourself into a new job",
+      "news_hook": "vibe coding",
+      "meme_score": 7,
+      "audience": "PMs",
+      "why_it_works": "The visual of Jim in Dwight's glasses is funny, and the line is a perfect setup for a punchline about 'vibe coding' in interviews."
+    },
+    {
+      "rank": 8,
+      "timestamp": "05:53",
+      "start_seconds": 353,
+      "duration_seconds": 12,
+      "what_happens_visually": "Michael is sitting down and says 'This just stinks.' Dwight starts putting peanut butter in his hair.",
+      "dialogue_hook": "This just stinks.",
+      "meme_caption": "When the new AI tool\nrequires a full rewrite",
+      "news_hook": "AI",
+      "meme_score": 7,
+      "audience": "engineers",
+      "why_it_works": "Michael's deadpan delivery and Dwight's bizarre actions create a relatable scenario for engineers dealing with frustrating tech changes."
+    }
+  ]
+}

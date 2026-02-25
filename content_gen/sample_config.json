@@ -1,0 +1,6 @@
+{
+  "url": "https://example.com/article",
+  "platforms": ["blog", "linkedin", "newsletter"],
+  "style": "every",
+  "version": "v1"
+}

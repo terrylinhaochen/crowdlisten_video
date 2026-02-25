@@ -1,0 +1,110 @@
+{
+  "source_file": "the_office_compilation_04.mp4",
+  "model": "gemini-2.0-flash",
+  "clips": [
+    {
+      "rank": 1,
+      "timestamp": "00:39",
+      "start_seconds": 39,
+      "duration_seconds": 12,
+      "what_happens_visually": "Kevin says \"probably when I ran over him the first time\", shrugs, smiles, and looks at the camera.",
+      "dialogue_hook": "Probably when I ran over him the first time.",
+      "meme_caption": "Oops, I shipped a bug\nto prod again",
+      "news_hook": null,
+      "meme_score": 9,
+      "audience": "engineers",
+      "why_it_works": "The casual delivery of a disastrous confession makes it relatable to engineers who accidentally push bugs to production."
+    },
+    {
+      "rank": 2,
+      "timestamp": "01:13",
+      "start_seconds": 73,
+      "duration_seconds": 12,
+      "what_happens_visually": "Jim and Pam are sitting side by side. Jim says \"But watch this guy make a billion dollars off my idea\". Pam looks at Jim with a concerned expression.",
+      "dialogue_hook": "But watch this guy make a billion dollars off my idea.",
+      "meme_caption": "Watching your ex-colleague\nlaunch your side project",
+      "news_hook": null,
+      "meme_score": 8,
+      "audience": "founders",
+      "why_it_works": "The regretful tone and the visual of Pam's concern makes it relatable to founders who see others succeed with their ideas."
+    },
+    {
+      "rank": 3,
+      "timestamp": "01:31",
+      "start_seconds": 91,
+      "duration_seconds": 10,
+      "what_happens_visually": "Kelly Kapoor is carrying a pile of coats and says \"I'm going to Miami beaches to hang with Lebron James and Gloria Estefan\".",
+      "dialogue_hook": "I'm going to Miami beaches to hang with Lebron James and Gloria Estefan.",
+      "meme_caption": "Me after quitting my job\nto 'build in public'",
+      "news_hook": null,
+      "meme_score": 8,
+      "audience": "founders",
+      "why_it_works": "The absurdly aspirational statement contrasts with the reality of most early-stage founders, creating humor."
+    },
+    {
+      "rank": 4,
+      "timestamp": "02:19",
+      "start_seconds": 139,
+      "duration_seconds": 10,
+      "what_happens_visually": "Pam says \"Don't you guys have everything? It's just a paper company\". Jim adjusts his tie.",
+      "dialogue_hook": "Don't you guys have everything? It's just a paper company.",
+      "meme_caption": "\"Why are you still working\non that side project?\"",
+      "news_hook": null,
+      "meme_score": 7,
+      "audience": "PMs",
+      "why_it_works": "The contrast between the question and the visual of Jim's discomfort highlights the often-unspoken pressure to justify ambition."
+    },
+    {
+      "rank": 5,
+      "timestamp": "03:00",
+      "start_seconds": 180,
+      "duration_seconds": 10,
+      "what_happens_visually": "Michael Scott is trying to sell call cards and says \"That's a nice attitude Ryan, I'm helping you invest in your future my friend\".",
+      "dialogue_hook": "I'm helping you invest in your future my friend.",
+      "meme_caption": "Recruiters be like:\n'It's a great opportunity!'",
+      "news_hook": null,
+      "meme_score": 7,
+      "audience": "engineers",
+      "why_it_works": "The overly enthusiastic and ultimately self-serving statement mirrors the often-exaggerated promises of recruiters."
+    },
+    {
+      "rank": 6,
+      "timestamp": "03:14",
+      "start_seconds": 194,
+      "duration_seconds": 10,
+      "what_happens_visually": "Michael Scott says \"You know what Toby, when the son of the deposed King of Nigeria emails you directly asking for help, you help!\".",
+      "dialogue_hook": "When the son of the deposed King of Nigeria emails you directly asking for help, you help!",
+      "meme_caption": "Me explaining why I'm\nbuilding a blockchain app",
+      "news_hook": null,
+      "meme_score": 6,
+      "audience": "founders",
+      "why_it_works": "The absurdly illogical justification resonates with the often-tenuous rationales behind certain tech trends."
+    },
+    {
+      "rank": 7,
+      "timestamp": "04:19",
+      "start_seconds": 259,
+      "duration_seconds": 10,
+      "what_happens_visually": "Ryan says \"Smokey's dead\". Pam asks \"Smokey the bear?\" Ryan says \"Smokey Robinson, Pam.\"",
+      "dialogue_hook": "Smokey's dead.\nSmokey the bear?\nSmokey Robinson, Pam.",
+      "meme_caption": "When you tell your boss\nabout a tech legend",
+      "news_hook": null,
+      "meme_score": 6,
+      "audience": "engineers",
+      "why_it_works": "The generational disconnect and the visual of Pam's confusion highlights the gap in knowledge about tech history."
+    },
+    {
+      "rank": 8,
+      "timestamp": "05:53",
+      "start_seconds": 353,
+      "duration_seconds": 7,
+      "what_happens_visually": "Dwight is sitting on a fitness ball and falls off it.",
+      "dialogue_hook": null,
+      "meme_caption": "Me trying to use\nCursor AI",
+      "news_hook": "Cursor",
+      "meme_score": 6,
+      "audience": "engineers",
+      "why_it_works": "The physical comedy of falling off the ball visualizes the frustration of trying to use a new, unstable AI tool."
+    }
+  ]
+}

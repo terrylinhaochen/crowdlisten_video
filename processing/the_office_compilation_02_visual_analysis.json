@@ -1,0 +1,110 @@
+{
+  "source_file": "the_office_compilation_02.mp4",
+  "model": "gemini-2.0-flash",
+  "clips": [
+    {
+      "rank": 1,
+      "timestamp": "01:02",
+      "start_seconds": 62,
+      "duration_seconds": 14,
+      "what_happens_visually": "Dwight walks into the men's bathroom, looks around, and sees his desk set up next to the urinals. He looks shocked and confused. The phone rings.",
+      "dialogue_hook": "Dwight: Jim, I've given you this information like 20 times.",
+      "meme_caption": "When your 'flexible' workspace\nis the men's room.",
+      "news_hook": null,
+      "meme_score": 9,
+      "audience": "Engineers, PMs",
+      "why_it_works": "Dwight's deadpan delivery and the absurdity of the situation create a relatable visual metaphor for the often-unpleasant realities of office life."
+    },
+    {
+      "rank": 2,
+      "timestamp": "00:18",
+      "start_seconds": 18,
+      "duration_seconds": 9,
+      "what_happens_visually": "Dwight walks into the office and sees his desk is gone. Jim says, 'Calm down. Where was the last place you saw it?' Dwight gets increasingly agitated.",
+      "dialogue_hook": "Dwight: Who moved my desk?!",
+      "meme_caption": "POV: You touch an engineer's\nkeyboard without asking.",
+      "news_hook": null,
+      "meme_score": 8,
+      "audience": "Engineers",
+      "why_it_works": "Dwight's over-the-top reaction to a minor inconvenience is a classic comedic trope, amplified by the visual of his empty desk."
+    },
+    {
+      "rank": 3,
+      "timestamp": "03:26",
+      "start_seconds": 206,
+      "duration_seconds": 11,
+      "what_happens_visually": "Michael opens a box with a knife, then pulls out a printer and a fax machine. He hurts himself in the process and yells in pain.",
+      "dialogue_hook": "Michael: Oww! Awesome!",
+      "meme_caption": "Me, deploying the MVP\nwithout a proper test plan.",
+      "news_hook": null,
+      "meme_score": 8,
+      "audience": "Founders, Engineers",
+      "why_it_works": "The physical comedy of Michael hurting himself while celebrating a minor victory is instantly funny and relatable to the rushed nature of startup culture."
+    },
+    {
+      "rank": 4,
+      "timestamp": "02:50",
+      "start_seconds": 170,
+      "duration_seconds": 10,
+      "what_happens_visually": "Michael and Dwight are in Michael's office. Michael puts a scanner on his desk and Dwight looks at it.",
+      "dialogue_hook": "Michael: Wow, cool. What's next?",
+      "meme_caption": "When you finally get the\nnew M3 Max MacBook Pro.",
+      "news_hook": null,
+      "meme_score": 7,
+      "audience": "Engineers, Designers",
+      "why_it_works": "The visual of the scanner and the question 'What's next?' perfectly captures the tech worker's constant pursuit of the newest and best tools."
+    },
+    {
+      "rank": 5,
+      "timestamp": "04:56",
+      "start_seconds": 296,
+      "duration_seconds": 7,
+      "what_happens_visually": "Pam reveals a new prize wheel. Kevin claps enthusiastically and says, 'Okay, that's what I'm talking about!'",
+      "dialogue_hook": "Kevin: Okay, that's what I'm talking about!",
+      "meme_caption": "When the PM adds\n'Pizza Party' to the sprint.",
+      "news_hook": null,
+      "meme_score": 7,
+      "audience": "Engineers, PMs",
+      "why_it_works": "Kevin's unbridled enthusiasm is a funny counterpoint to the often-uninspired 'perks' offered in tech, highlighting the absurdity of the situation."
+    },
+    {
+      "rank": 6,
+      "timestamp": "03:51",
+      "start_seconds": 231,
+      "duration_seconds": 10,
+      "what_happens_visually": "The office is putting a box back together. Pam says, 'Did we try printer first? Shredder at an angle? Fax cable then the scanner upside down?'",
+      "dialogue_hook": "Pam: Did we try printer first? Shredder at an angle? Fax cable then the scanner upside down?",
+      "meme_caption": "Brainstorming solutions\nto a production outage.",
+      "news_hook": null,
+      "meme_score": 6,
+      "audience": "Engineers",
+      "why_it_works": "The rapid-fire, nonsensical suggestions create a humorous depiction of the frantic, often illogical, problem-solving process during a crisis."
+    },
+    {
+      "rank": 7,
+      "timestamp": "05:55",
+      "start_seconds": 355,
+      "duration_seconds": 10,
+      "what_happens_visually": "Pam and Erin spin a wheel. Erin wins the toilet cleaning duty and is excited.",
+      "dialogue_hook": "Pam: Toilet!",
+      "meme_caption": "When you finally land\nthat internship at OpenAI.",
+      "news_hook": "OpenAI",
+      "meme_score": 6,
+      "audience": "Students, Aspiring Engineers",
+      "why_it_works": "The unexpected juxtaposition of a coveted job with a mundane task is funny, and the visual of the wheel adds to the comedic effect."
+    },
+    {
+      "rank": 8,
+      "timestamp": "04:15",
+      "start_seconds": 255,
+      "duration_seconds": 7,
+      "what_happens_visually": "The camera pans over a messy office. Pam says, 'Instead, we're living in filth, but not for long.'",
+      "dialogue_hook": "Pam: Instead, we're living in filth, but not for long.",
+      "meme_caption": "POV: Your startup after\n'move fast and break things'.",
+      "news_hook": null,
+      "meme_score": 6,
+      "audience": "Founders, Engineers",
+      "why_it_works": "The visual of the messy office combined with Pam's optimistic yet ironic statement creates a relatable scenario for anyone who has worked in a fast-paced, chaotic startup."
+    }
+  ]
+}

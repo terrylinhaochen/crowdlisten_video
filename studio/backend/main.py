@@ -199,6 +199,22 @@ def serve_audio(filename: str):
     return FileResponse(str(path), media_type="audio/mpeg")
 
 
+# ── Content Gen ──────────────────────────────────────────────────────────────
+
+class ContentGenRequest(BaseModel):
+    url: str | None = None
+    input: str | None = None
+    platforms: list[str] | str | None = None
+    style: str = "every"
+    version: str | None = None
+
+
+@app.post("/api/content-gen")
+def content_gen_endpoint(req: ContentGenRequest):
+    from .content_gen import run_content_gen as run_content_gen_pipeline
+    return run_content_gen_pipeline(req.model_dump())
+
+
 # ── Render ────────────────────────────────────────────────────────────────────
 
 class RenderRequest(BaseModel):

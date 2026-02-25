@@ -1,0 +1,110 @@
+{
+  "source_file": "the_office_compilation_05.mp4",
+  "model": "gemini-2.0-flash",
+  "clips": [
+    {
+      "rank": 1,
+      "timestamp": "00:55",
+      "start_seconds": 55,
+      "duration_seconds": 10,
+      "what_happens_visually": "Michael, in a suit, looks at Oscar, who is standing. Michael says, \"Why don't you explain this to me like I am an 8-year-old?\"",
+      "dialogue_hook": "Why don't you explain this to me like I am an 8-year-old?",
+      "meme_caption": "Explaining the sprint\nbacklog to stakeholders",
+      "news_hook": null,
+      "meme_score": 9,
+      "audience": "PMs",
+      "why_it_works": "The line is a perfect encapsulation of PM frustration with non-technical stakeholders, and Michael's expression is priceless."
+    },
+    {
+      "rank": 2,
+      "timestamp": "01:17",
+      "start_seconds": 117,
+      "duration_seconds": 11,
+      "what_happens_visually": "Michael looks stressed, covering his eyes with his hand. He then says, \"Why don't you explain this to me like I'm five?\"",
+      "dialogue_hook": "Why don't you explain this to me like I'm five?",
+      "meme_caption": "When the engineer\nexplains it again",
+      "news_hook": null,
+      "meme_score": 8,
+      "audience": "PMs",
+      "why_it_works": "It's a classic Michael Scott line, relatable to PMs who have struggled to understand technical concepts."
+    },
+    {
+      "rank": 3,
+      "timestamp": "02:05",
+      "start_seconds": 125,
+      "duration_seconds": 10,
+      "what_happens_visually": "Michael looks at Oscar, who is standing and explaining the budget. Michael says, \"Okay. Break it down in terms of... I'm getting you.\"",
+      "dialogue_hook": "Break it down in terms of... I'm getting you.",
+      "meme_caption": "VCs explaining the\nvaluation to founders",
+      "news_hook": null,
+      "meme_score": 7,
+      "audience": "Founders",
+      "why_it_works": "Michael's blank expression and the line perfectly capture the feeling of founders trying to understand complex financial concepts."
+    },
+    {
+      "rank": 4,
+      "timestamp": "03:06",
+      "start_seconds": 186,
+      "duration_seconds": 10,
+      "what_happens_visually": "Dwight and Ryan are sitting at their desks. Dwight says, \"Brain teaser. I have two coins totaling 15 cents. One of them is not a nickel. What are they?\"",
+      "dialogue_hook": "Brain teaser. I have two coins totaling 15 cents. One of them is not a nickel. What are they?",
+      "meme_caption": "Coding interview\nquestions be like:",
+      "news_hook": null,
+      "meme_score": 8,
+      "audience": "Engineers",
+      "why_it_works": "It's a funny setup to a silly riddle, and the caption connects to the often-absurd logic puzzles used in coding interviews."
+    },
+    {
+      "rank": 5,
+      "timestamp": "03:33",
+      "start_seconds": 213,
+      "duration_seconds": 7,
+      "what_happens_visually": "Dwight is wearing a brown suit and looking at Ryan. He adjusts his glasses and says, \"Hunter.\"",
+      "dialogue_hook": "Hunter.",
+      "meme_caption": "When the AI chatbot\ncalls you 'partner'",
+      "news_hook": null,
+      "meme_score": 7,
+      "audience": "Engineers",
+      "why_it_works": "Dwight's intense stare and the single word delivery are funny, and the caption connects to the sometimes-awkward language used by AI chatbots."
+    },
+    {
+      "rank": 6,
+      "timestamp": "03:59",
+      "start_seconds": 239,
+      "duration_seconds": 11,
+      "what_happens_visually": "Michael is standing in front of the window. He says, \"I know why she is calling. It's the end of the month and I was supposed to let somebody go by the end of the month.\"",
+      "dialogue_hook": "I know why she is calling. It's the end of the month and I was supposed to let somebody go by the end of the month.",
+      "meme_caption": "When you forget to\nship the feature",
+      "news_hook": null,
+      "meme_score": 7,
+      "audience": "PMs",
+      "why_it_works": "Michael's panicked expression and the line capture the stress of missing deadlines and dealing with consequences."
+    },
+    {
+      "rank": 7,
+      "timestamp": "04:17",
+      "start_seconds": 257,
+      "duration_seconds": 10,
+      "what_happens_visually": "Michael is sitting at his desk. He says, \"If you were getting fired, how would you want to be told so that you could still be friends with the person firing you?\"",
+      "dialogue_hook": "If you were getting fired, how would you want to be told so that you could still be friends with the person firing you?",
+      "meme_caption": "Asking your team for\n360 feedback",
+      "news_hook": null,
+      "meme_score": 7,
+      "audience": "PMs",
+      "why_it_works": "Michael's awkwardness and the line perfectly capture the difficulty of giving and receiving feedback."
+    },
+    {
+      "rank": 8,
+      "timestamp": "05:55",
+      "start_seconds": 355,
+      "duration_seconds": 10,
+      "what_happens_visually": "Michael is talking to the camera. He says, \"Tonight one of our most ethnic coworkers, Kelly, has invited us all to a Diwali celebration put on by her community.\"",
+      "dialogue_hook": "Tonight one of our most ethnic coworkers, Kelly, has invited us all to a Diwali celebration put on by her community.",
+      "meme_caption": "HR's DEI training\nbe like:",
+      "news_hook": null,
+      "meme_score": 7,
+      "audience": "All",
+      "why_it_works": "Michael's tone-deaf comment is funny, and the caption connects to the often-cringeworthy nature of corporate DEI initiatives."
+    }
+  ]
+}

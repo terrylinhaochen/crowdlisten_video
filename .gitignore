@@ -6,3 +6,12 @@ __pycache__/
 *.pyc
 .DS_Store
 .env
+
+# Large video files
+marketing_clips/*.mp4
+reels_output/
+published/
+
+# Large audio/analysis files
+processing/*.mp3
+processing/*.wav

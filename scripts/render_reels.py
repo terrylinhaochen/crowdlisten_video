@@ -12,6 +12,7 @@ import subprocess, os, textwrap
 FONT    = "/System/Library/Fonts/Supplemental/Impact.ttf"
 BASE    = "/Users/terry/Desktop/crowdlisten_files/crowdlisten_marketing"
 CLIPS_DIR = f"{BASE}/marketing_clips"
+CHUNKS_DIR = f"{BASE}/processing/office_chunks"
 OUTBASE = f"{BASE}/reels_output"
 
 # Source files
@@ -19,8 +20,15 @@ OFFICE = f"{CLIPS_DIR}/The Office Best Scenes.mp4"
 SV1    = f"{CLIPS_DIR}/siliconvalley1.mp4"
 SV2    = f"{CLIPS_DIR}/siliconvalley2.mp4"
 SV3    = f"{CLIPS_DIR}/siliconvalley3.mp4"
+MF1    = f"{CLIPS_DIR}/modernfamily1.mp4"
+MF2    = f"{CLIPS_DIR}/modernfamily2.mp4"
+# v12: New SV cuts (Whisper transcript driven)
+NSV1   = f"{CLIPS_DIR}/silicon_valley_1.mp4"
+NSV2   = f"{CLIPS_DIR}/silicon_valley_2.mp4"
+NSV3   = f"{CLIPS_DIR}/silicon_valley_3.mp4"
+NSV4   = f"{CLIPS_DIR}/silicon_valley_4.mp4"
 
-VERSION = "v6"   # ← bump for each new batch
+VERSION = "v12"   # ← bump for each new batch
 
 OW, OH       = 1080, 1920
 VH           = 608
@@ -33,75 +41,72 @@ CANVAS_W     = OW - 60
 
 # ── CLIPS ────────────────────────────────────────────────────────────────────
 # (name, source_file, start_sec, duration_sec, caption)
-# v6: ALL clips selected via Gemini visual analysis — picking what LOOKS funny,
-#     not just what sounds funny. Captions rewritten for unhinged TikTok energy.
+# v7: the_office_compilation.mp4 — Gemini visual analysis on 6 × 10-min chunks.
+#     All clips score 8-9/10. CTA overlay added to all clips.
 
 CLIPS = [
 
-    # ── THE OFFICE — visual analysis picks ───────────────────────────────
+    # ── v12: New Silicon Valley cuts (Whisper transcript driven) ───────────
 
-    (   # VISUAL: Dwight pointing in smoky chaos, people shoving past him
-        # Gemini: [9/10] "PM tries to manage a Sev-1"
-        "01_pm_managing_a_sev1_at_3am",
-        OFFICE, 57, 12,
-        "PM managing\na Sev-1 at 3am",
+    (   # buzzword soup pitch — SV1 ~370s
+        "01_making_the_world_a_better_place",
+        NSV1, 370, 22,
+        "Our pitch deck\nin 22 seconds",
     ),
-    (   # VISUAL: Michael declares door 'warm', everyone pivots to wrong door
-        # Gemini: [8/10] "your solution breaks prod even worse"
-        "02_your_hotfix_breaks_prod_even_worse",
-        OFFICE, 77, 8,
-        "your hotfix\nbreaks prod even worse",
+    (   # asshole vacuum — SV1 ~281s
+        "02_asshole_vacuum",
+        NSV1, 281, 18,
+        "Leadership advice\nnobody asked for",
     ),
-    (   # VISUAL: Michael shoves past everyone — "everyone for himself!"
-        # Gemini: [7/10] "CEO bails during layoff" — kept because it's 6s of pure gold
-        "03_ceo_during_the_all_hands_layoff_call",
-        OFFICE, 104, 6,
-        "CEO during the\nall-hands layoff call",
+    (   # startup nosedive speech — SV1 ~1292s
+        "03_pulled_out_of_nosedive",
+        NSV1, 1292, 18,
+        "VC after the\nbridge round closes",
     ),
-    (   # Terry's favourite from v4 — keeping it
-        # VISUAL: Michael drops last-minute demo changes with total sincerity
-        "04_stakeholder_10_mins_before_the_demo",
-        OFFICE, 1264, 7,
-        "stakeholder 10 minutes\nbefore the demo",
+    (   # Peter Gregory is dead — SV2 ~58s
+        "04_peter_gregory_is_dead",
+        NSV2, 58, 10,
+        "When your lead investor\ngoes quiet",
     ),
-
-    # ── SILICON VALLEY — visual analysis picks ────────────────────────────
-
-    (   # VISUAL: Gavin: "That was horrible." — 6s reaction shot, no setup needed
-        # Gemini: [8/10] "CEO seeing the AI demo"
-        "05_ceo_seeing_the_ai_demo_we_built_for_3_months",
-        SV1, 127, 7,
-        "CEO seeing the AI demo\nwe built for 3 months",
+    (   # dick up and flat broke — SV2 ~743s
+        "05_dick_up_flat_broke",
+        NSV2, 743, 16,
+        "PM at end of\nQ4 runway",
     ),
-    (   # VISUAL: entire room physically recoils at Gavin's billionaires comment
-        # Gemini: [10/10] total shock reaction — maps to any unhinged CEO take
-        "06_our_ceo_explaining_why_the_layoffs_are_good_actually",
-        SV1, 308, 8,
-        "our CEO explaining why\nthe layoffs are good actually",
+    (   # $14k smart fridge / fat and poor — SV2 ~903s
+        "06_smart_fridge",
+        NSV2, 903, 22,
+        "When the eng team\nwants a new tool",
     ),
-    (   # VISUAL: man in suit aggressively pointing on private jet, scope creep
-        # Gemini: [9/10] "one more thing to the sprint"
-        "07_pm_adding_one_more_thing_to_the_sprint",
-        SV2, 28, 13,
-        "PM adding one more thing\nto the sprint",
+    (   # This guy fucks — Russ intro — SV3 ~6s
+        "07_this_guy_fucks",
+        NSV3, 6, 16,
+        "Investors meeting\nthe founding team",
     ),
-    (   # VISUAL: Gavin looks at laptop, mutters "Goddamn motherfucker" — perfect loop
-        # Gemini: [8/10] VC frustration — recaptioned for relatable dev energy
-        "08_me_opening_slack_after_a_3day_weekend",
-        SV2, 70, 10,
-        "me opening Slack\nafter a 3-day weekend",
+    (   # billionaire math: less than a CD — SV3 ~105s
+        "08_less_than_a_cd",
+        NSV3, 105, 20,
+        "VC explaining\nROI to LPs",
     ),
-    (   # VISUAL: Erlich physically kicking a robot deer — the WHOLE JOKE is visual
-        # Gemini: [9/10] completely missed by audio analysis
-        "09_debugging_the_ai_agent_at_2am",
-        SV3, 34, 10,
-        "debugging the AI agent\nat 2am",
+    (   # new internet vision — SV3 ~679s
+        "09_new_internet",
+        NSV3, 679, 22,
+        "Founder after\nreading Paul Graham",
     ),
-    (   # VISUAL: man in jail cell, orange jumpsuit, black eye — context we never had
-        # Gemini: [8/10] recaptioned: AI agent left unsupervised
-        "10_our_codebase_after_ai_had_unsupervised_access",
-        SV3, 137, 10,
-        "our codebase after the AI\nhad unsupervised access all weekend",
+    (   # 36 ICOs one worked — SV3 ~808s
+        "10_36_icos",
+        NSV3, 808, 24,
+        "Me after my\ncrypto strategy",
+    ),
+    (   # Jared ghost-like features intro — SV4 ~0s
+        "11_ghost_like_features",
+        NSV4, 0, 14,
+        "New hire on\nday one at a startup",
+    ),
+    (   # driverless car to Errolon — SV4 ~208s
+        "12_driverless_car",
+        NSV4, 208, 26,
+        "When AI takes over\nyour calendar",
     ),
 
 ]
@@ -129,6 +134,17 @@ def esc(t):
             .replace(",",  "\\,"))
 
 
+CTA_LINE1 = "The PM for AI Agents"
+CTA_LINE2 = "crowdlisten.com"
+CTA_FONT  = "/System/Library/Fonts/Helvetica.ttc"   # clean sans-serif for CTA
+CTA_FS1   = 34    # brand tagline
+CTA_FS2   = 42    # URL — slightly bigger for readability
+CTA_COLOR = "0xD97D55"  # CrowdListen coral
+VIDEO_BOT = VY + VH     # y where video ends = 1264
+LOGO_PATH = f"{BASE}/brand_assets/CRD.png"
+LOGO_W    = 220
+
+
 def build_vf(caption):
     lines   = auto_wrap(caption)
     fs      = font_size_for(lines)
@@ -136,21 +152,53 @@ def build_vf(caption):
     block_h = len(lines) * lh
     block_y = max((VY - block_h) // 2, 24)
 
+    bottom_space = OH - VIDEO_BOT           # 656px below video
+    # Stack: logo, tagline, URL — centered in bottom area
+    cta_block_h  = LOGO_W + 16 + CTA_FS1 + 10 + CTA_FS2 + 10
+    cta_top      = VIDEO_BOT + (bottom_space - cta_block_h) // 2
+    logo_y       = cta_top
+    text_top     = logo_y + LOGO_W + 16
+
     filters = [f"scale={OW}:-2", f"pad={OW}:{OH}:(ow-iw)/2:(oh-ih)/2:black"]
+
+    # Meme caption (top area, white Impact)
     for i, line in enumerate(lines):
         filters.append(
             f"drawtext=fontfile='{FONT}':text='{esc(line)}':fontcolor=white"
             f":fontsize={fs}:borderw={BORDER}:bordercolor=black"
             f":x=(w-text_w)/2:y={block_y + i*lh}"
         )
-    return ",".join(filters)
+
+    # CTA tagline
+    filters.append(
+        f"drawtext=fontfile='{CTA_FONT}':text='{esc(CTA_LINE1)}':fontcolor={CTA_COLOR}"
+        f":fontsize={CTA_FS1}:borderw=3:bordercolor=black"
+        f":x=(w-text_w)/2:y={text_top}"
+    )
+    # CTA URL
+    filters.append(
+        f"drawtext=fontfile='{CTA_FONT}':text='{esc(CTA_LINE2)}':fontcolor=white"
+        f":fontsize={CTA_FS2}:borderw=3:bordercolor=black"
+        f":x=(w-text_w)/2:y={text_top + CTA_FS1 + 10}"
+    )
+
+    vf_chain = ",".join(filters)
+    filter_complex = (
+        f"[0:v]{vf_chain}[bg];"
+        f"[1:v]scale={LOGO_W}:-1[logo];"
+        f"[bg][logo]overlay=(W-w)/2:{logo_y}[v]"
+    )
+    return filter_complex
 
 
 def render(out_dir, name, src, start, dur, caption):
     out = os.path.join(out_dir, f"{name}.mp4")
     r = subprocess.run([
-        "ffmpeg", "-y", "-ss", str(start), "-i", src,
-        "-t", str(dur), "-vf", build_vf(caption),
+        "ffmpeg", "-y", "-i", src,
+        "-i", LOGO_PATH,
+        "-ss", str(start), "-t", str(dur),
+        "-filter_complex", build_vf(caption),
+        "-map", "[v]", "-map", "0:a",
         "-c:v", "libx264", "-crf", "20", "-preset", "fast",
         "-c:a", "aac", "-b:a", "128k", "-movflags", "+faststart", out,
     ], capture_output=True, text=True)

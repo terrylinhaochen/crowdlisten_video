@@ -1,0 +1,110 @@
+{
+  "source_file": "the_office_compilation_01.mp4",
+  "model": "gemini-2.0-flash",
+  "clips": [
+    {
+      "rank": 1,
+      "timestamp": "00:08",
+      "start_seconds": 8,
+      "duration_seconds": 10,
+      "what_happens_visually": "Dwight explains why he won't let people into his survival bunker, with Kevin looking confused. Pam looks horrified.",
+      "dialogue_hook": "Kevin will be eaten. Pam will be taken slave. Jim will be made a warlord's jester. Meredith will do okay.",
+      "meme_caption": "Sprint planning in a nutshell.\nStakeholder alignment is key.",
+      "news_hook": null,
+      "meme_score": 9,
+      "audience": "PMs",
+      "why_it_works": "Exaggerated doomerism is funny, and the visual of Pam's reaction sells the absurdity."
+    },
+    {
+      "rank": 2,
+      "timestamp": "00:36",
+      "start_seconds": 36,
+      "duration_seconds": 5,
+      "what_happens_visually": "Jim is thinking hard, then Pam whispers a number in his ear and he nods.",
+      "dialogue_hook": "One year.",
+      "meme_caption": "Me estimating the timeline\nfor my side project.",
+      "news_hook": null,
+      "meme_score": 8,
+      "audience": "Engineers",
+      "why_it_works": "The visual of Pam whispering a ridiculous number is relatable to engineers who are constantly being asked for impossible timelines."
+    },
+    {
+      "rank": 3,
+      "timestamp": "01:41",
+      "start_seconds": 141,
+      "duration_seconds": 5,
+      "what_happens_visually": "Michael scratches his head aggressively and says 'Entourage' with a weird emphasis.",
+      "dialogue_hook": "Entourage!",
+      "meme_caption": "When the VC asks about\nyour 'inspiration'.",
+      "news_hook": null,
+      "meme_score": 7,
+      "audience": "Founders",
+      "why_it_works": "The visual of Michael's exaggerated expression and the word 'Entourage' is perfect for calling out the superficiality of some startup inspirations."
+    },
+    {
+      "rank": 4,
+      "timestamp": "02:09",
+      "start_seconds": 141,
+      "duration_seconds": 10,
+      "what_happens_visually": "The Cookie Monster video is playing. Kevin looks at the camera and says 'This isn't funny'.",
+      "dialogue_hook": "This isn't funny. I don't talk like that.",
+      "meme_caption": "When your AI avatar is racist.\nTime to fine-tune the prompt.",
+      "news_hook": "Claude, Gemini",
+      "meme_score": 9,
+      "audience": "Engineers",
+      "why_it_works": "The visual of Kevin's serious expression is a great reaction to the absurdity of the Cookie Monster video, and it's relatable to the challenges of AI bias."
+    },
+    {
+      "rank": 5,
+      "timestamp": "02:54",
+      "start_seconds": 254,
+      "duration_seconds": 12,
+      "what_happens_visually": "The scene cuts to Jim, who is actually Steve, smiling and looking at the camera.",
+      "dialogue_hook": "Michael Scott, Manager. Hi, how are ya? Great.",
+      "meme_caption": "When you gaslight your team\ninto thinking you're competent.",
+      "news_hook": null,
+      "meme_score": 8,
+      "audience": "Founders",
+      "why_it_works": "The visual of the fake Jim, combined with the caption, is a funny way to call out the imposter syndrome that many founders experience."
+    },
+    {
+      "rank": 6,
+      "timestamp": "03:11",
+      "start_seconds": 311,
+      "duration_seconds": 10,
+      "what_happens_visually": "Pam is explaining that the new phone system allows people to call a salesperson directly. She wants a candy vending machine.",
+      "dialogue_hook": "I'd like to see a machine that puts out candy for everyone. Vending machine.",
+      "meme_caption": "Me: \"We need AI!\"\nAlso me: \"Can it dispense candy?\"",
+      "news_hook": "AI tools",
+      "meme_score": 7,
+      "audience": "PMs",
+      "why_it_works": "The visual of Pam's innocent expression, combined with the caption, is a relatable way to call out the sometimes-unrealistic expectations that people have for AI."
+    },
+    {
+      "rank": 7,
+      "timestamp": "03:40",
+      "start_seconds": 340,
+      "duration_seconds": 10,
+      "what_happens_visually": "Michael and Jim are giving a thumbs up, and Pam joins in.",
+      "dialogue_hook": "Hey!",
+      "meme_caption": "When your team finally ships\na feature you don't understand.",
+      "news_hook": null,
+      "meme_score": 7,
+      "audience": "VCs",
+      "why_it_works": "The visual of the three characters giving a thumbs up is a funny way to call out the sometimes-superficial support that VCs give to their portfolio companies."
+    },
+    {
+      "rank": 8,
+      "timestamp": "05:51",
+      "start_seconds": 351,
+      "duration_seconds": 15,
+      "what_happens_visually": "Dwight is dressed in a top hat and tails. He throws dirt at Phyllis and Kevin.",
+      "dialogue_hook": "I am dressed according to the schrute codes of mourning. My aunt Shirley has died.",
+      "meme_caption": "When your startup pivots\nbut you're still wearing the old swag.",
+      "news_hook": null,
+      "meme_score": 6,
+      "audience": "Founders",
+      "why_it_works": "The visual of Dwight's ridiculous outfit and the caption is a funny way to call out the sometimes-awkward transitions that startups go through."
+    }
+  ]
+}

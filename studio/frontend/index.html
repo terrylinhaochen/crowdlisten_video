@@ -4,24 +4,48 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>CrowdListen Studio</title>
-  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="style.css?v=8"/>
 </head>
 <body>
 <div id="app">
 
   <!-- Header -->
   <header id="header">
-    <span class="logo" onclick="gotoStep(1)" style="cursor:pointer">CrowdListen <span class="logo-accent">Studio</span></span>
-    <div class="header-right">
-      <button class="nav-link" data-tab="create" onclick="switchTab('create')">Create</button>
-      <button class="nav-link" data-tab="published" onclick="switchTab('published')">Published</button>
-    </div>
+    <span class="logo" onclick="switchTab('home')" style="cursor:pointer">CrowdListen <span class="logo-accent">Studio</span></span>
+    <div class="header-right"></div>
   </header>
-
+  
   <div id="main">
 
-    <!-- ── CREATE TAB ───────────────────────────────────────────── -->
-    <div id="tab-create" class="tab-page active">
+
+    <!-- ── HOME TAB ───────────────────────────────────────────── -->
+    <div id="tab-home" class="tab-page active">
+      <div class="home-hero">
+        <h1>Choose a workflow</h1>
+        <p>Pick one panel to continue.</p>
+      </div>
+      <div class="panel-nav home-only">
+        <button class="panel-tab" data-tab="create" onclick="switchTab('create')">
+          <span class="panel-tab-title">Create</span>
+          <span class="panel-tab-sub">Upload → Options → Process → Library</span>
+          <span class="panel-preview">🎬 Upload a source video, auto-detect moments, and render social-ready clips.</span>
+        </button>
+        <button class="panel-tab" data-tab="repurpose" onclick="switchTab('repurpose')">
+          <span class="panel-tab-title">Repurpose</span>
+          <span class="panel-tab-sub">Text / File / Images → Multi-channel drafts</span>
+          <span class="panel-preview">✍️ Paste long-form content or upload files/images to generate platform drafts.</span>
+        </button>
+        <button class="panel-tab" data-tab="published" onclick="switchTab('published')">
+          <span class="panel-tab-title">Published</span>
+          <span class="panel-tab-sub">Review and manage exported assets</span>
+          <span class="panel-preview">📦 Browse produced assets, review outputs, and clean up what’s live-ready.</span>
+        </button>
+      </div>
+    </div><!-- /tab-home -->
+
+<!-- ── CREATE TAB ───────────────────────────────────────────── -->
+    <div id="tab-create" class="tab-page hidden">
+      <div class="subnav-back"><button class="btn-small" onclick="switchTab('home')">← Back to workflows</button></div>
 
       <!-- Progress bar -->
       <div id="step-bar" class="step-bar">
@@ -164,7 +188,7 @@
         </div>
 
         <div class="step-actions">
-          <button class="btn-secondary" onclick="gotoStep(1)">← Back</button>
+          <button class="btn-secondary" onclick="switchTab('home')">← Back</button>
           <button class="btn-primary" onclick="startPipeline()">Process Video →</button>
         </div>
       </div>
@@ -219,11 +243,76 @@
 
     </div><!-- /tab-create -->
 
+
+
+    <!-- ── REPURPOSE TAB ───────────────────────────────────────── -->
+    <div id="tab-repurpose" class="tab-page hidden repurpose-page">
+      <div class="subnav-back"><button class="btn-small" onclick="switchTab('home')">← Back to workflows</button></div>
+      <div class="step-hero">
+        <h1>Repurpose Text / Images</h1>
+        <p>OpenClaw processing for long-form text → multi-channel drafts.</p>
+      </div>
+
+      <div class="options-grid repurpose-grid">
+        <div class="option-section">
+          <div class="option-section-title">Source text</div>
+          <textarea id="repurpose-text" class="text-input" rows="10" placeholder="Paste long-form text here..."></textarea>
+          <div class="file-row">
+            <div class="file-label">Source file (.md/.txt/.html)</div>
+            <input class="file-input" id="repurpose-file" type="file" accept=".md,.markdown,.txt,.html,.htm"/>
+          </div>
+          <div class="file-row">
+            <div class="file-label">Optional images</div>
+            <input class="file-input" id="repurpose-images" type="file" accept="image/*" multiple/>
+          </div>
+        </div>
+
+        <div class="option-section two-col">
+          <div>
+            <div class="option-section-title">Platforms</div>
+            <select id="repurpose-platforms" class="select-input" multiple size="4" title="Select one or more platforms">
+              <option value="blog" selected>blog</option>
+              <option value="linkedin" selected>linkedin</option>
+              <option value="newsletter" selected>newsletter</option>
+              <option value="thread" selected>thread</option>
+            </select>
+            <div class="field-help">Use ⌘/Ctrl-click for multi-select. Defaults to all.</div>
+          </div>
+          <div>
+            <div class="option-section-title">Version (optional)</div>
+            <input id="repurpose-version" class="text-input" placeholder="e.g. v1"/>
+          </div>
+        </div>
+
+        <div class="option-section">
+          <div class="option-section-title">OpenClaw content adjustment guide</div>
+          <select id="repurpose-guide-platform" class="select-input" onchange="updateRepurposeGuide()">
+            <option value="blog">blog</option>
+            <option value="linkedin">linkedin</option>
+            <option value="newsletter">newsletter</option>
+            <option value="thread">thread</option>
+          </select>
+          <pre id="repurpose-guide" class="result-box" style="margin-top:10px"></pre>
+        </div>
+
+        <div class="step-actions repurpose-actions">
+          <button class="btn-secondary" onclick="copyRepurposeGuidePrompt()">Copy OpenClaw guide prompt</button>
+          <button class="btn-primary" onclick="runRepurpose()">Run Repurpose →</button>
+        </div>
+
+        <div class="option-section">
+          <div class="option-section-title">Result</div>
+          <pre id="repurpose-result" class="result-box">Idle.</pre>
+        </div>
+      </div>
+    </div><!-- /tab-repurpose -->
+
     <!-- ── PUBLISHED TAB ─────────────────────────────────────────── -->
     <div id="tab-published" class="tab-page hidden">
+      <div class="subnav-back"><button class="btn-small" onclick="switchTab('home')">← Back to workflows</button></div>
       <div class="pub-header">
-        <h1>Published</h1>
-        <button class="btn-small" onclick="loadPublished()">Refresh</button>
+        <h1>Scheduler</h1>
+        <button class="btn-small" onclick="loadPublished()">Refresh Scheduler</button>
       </div>
       <div id="published-grid" class="library-grid">
         <div class="loading-state">Loading…</div>
@@ -233,6 +322,6 @@
   </div><!-- /main -->
 </div><!-- /app -->
 
-<script src="app.js"></script>
+<script src="app.js?v=8"></script>
 </body>
 </html>

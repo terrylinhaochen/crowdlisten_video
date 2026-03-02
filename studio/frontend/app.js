@@ -11,9 +11,11 @@ let eventSource = null;
 function switchTab(name) {
   document.querySelectorAll('.tab-page').forEach(p => p.classList.add('hidden'));
   document.getElementById('tab-' + name).classList.remove('hidden');
-  document.querySelectorAll('.nav-link').forEach(b => b.classList.remove('active'));
-  const btn = document.querySelector(`[data-tab="${name}"]`);
-  if (btn) btn.classList.add('active');
+  document.querySelectorAll('.nav-link, .panel-tab').forEach(b => b.classList.remove('active'));
+  const btns = document.querySelectorAll(`[data-tab=\"${name}\"]`);
+  btns.forEach(btn => btn.classList.add('active'));
+  const main = document.getElementById('main');
+  if (main) main.classList.toggle('home-layout', name === 'home');
   if (name === 'published') loadPublished();
 }
 
@@ -304,23 +306,15 @@ async function saveSelected() {
   }
 }
 
-/* ── Published tab ────────────────────────────────────────────── */
+/* ── Published tab (Scheduler) ───────────────────────────────── */
 
-async function loadPublished() {
-  const grid = document.getElementById('published-grid');
-  grid.innerHTML = '<div class="loading-state">Loading…</div>';
+function fmtDate(iso) {
+  try { return new Date(iso).toLocaleString(); } catch { return iso || ''; }
+}
 
-  const res = await fetch(`${API}/api/published`);
-  const data = await res.json();
-  const clips = data.videos || [];
-
-  if (!clips.length) {
-    grid.innerHTML = '<div class="empty-state">No published clips yet.</div>';
-    return;
-  }
-
-  grid.innerHTML = clips.map(clip => `
-    <div class="clip-card">
+function renderVideoCard(clip, actionsHtml='') {
+  return `
+    <div class="clip-card scheduler-item-card">
       <div class="clip-video-wrap">
         <video class="clip-video" src="${clip.url}"
                muted loop preload="metadata"
@@ -329,13 +323,96 @@ async function loadPublished() {
       <div class="clip-info">
         <div class="clip-caption">${clip.filename}</div>
         <div class="clip-meta">
-          <span class="clip-date">${clip.folder}</span>
-          <span class="clip-duration">${clip.size_mb}MB</span>
-          <button class="btn-danger-small" onclick="deletePublished('${clip.rel_path}')">Delete</button>
+          <span class="clip-date">${clip.folder || ''}</span>
+          <span class="clip-duration">${clip.size_mb || 0}MB</span>
+          <span class="clip-date">${clip.schedule_date || ''}</span>
         </div>
+        ${actionsHtml}
       </div>
     </div>
-  `).join('');
+  `;
+}
+
+async function setSchedule(relPath, val) {
+  await fetch(`${API}/api/published/schedule`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ rel_path: relPath, schedule_date: val }),
+  });
+  loadPublished();
+}
+
+async function toggleArchive(relPath, archived=true) {
+  await fetch(`${API}/api/published/archive`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ rel_path: relPath, archived }),
+  });
+  loadPublished();
+}
+
+async function loadPublished() {
+  const grid = document.getElementById('published-grid');
+  grid.innerHTML = '<div class="loading-state">Loading scheduler…</div>';
+
+  const res = await fetch(`${API}/api/published`);
+  const data = await res.json();
+
+  const newly = data.newly_generated || [];
+  const groups = data.to_be_published_groups || [];
+  const archived = data.archived || [];
+
+  let html = '';
+
+  html += `<section class="option-section"><div class="option-section-title">Newly Generated</div>`;
+  if (!newly.length) {
+    html += '<div class="empty-state" style="padding:16px">No newly generated videos in review.</div>';
+  } else {
+    html += `<div class="scheduler-row">${newly.map(v => renderVideoCard(v)).join('')}</div>`;
+  }
+  html += `</section>`;
+
+  html += `<section class="option-section"><div class="option-section-title">To Be Published</div>`;
+  if (!groups.length) {
+    html += '<div class="empty-state" style="padding:16px">Nothing scheduled yet.</div>';
+  } else {
+    for (const g of groups) {
+      html += `<h3 style="margin:8px 0 12px;font-size:18px">${g.label}</h3>`;
+      html += `<div class="scheduler-row">`;
+      html += g.items.map(v => {
+        const actions = `
+          <div style="margin-top:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+            <input type="date" value="${v.schedule_date || ''}" onchange="setSchedule('${v.rel_path}', this.value)" class="text-input" style="width:170px"/>
+            <button class="btn-small" onclick="toggleArchive('${v.rel_path}', true)">Archive</button>
+            <button class="btn-danger-small" onclick="deletePublished('${v.rel_path}')">Delete</button>
+          </div>
+        `;
+        return renderVideoCard(v, actions);
+      }).join('');
+      html += `</div>`;
+    }
+  }
+  html += `</section>`;
+
+  html += `<section class="option-section"><div class="option-section-title">Archived</div>`;
+  if (!archived.length) {
+    html += '<div class="empty-state" style="padding:16px">No archived items.</div>';
+  } else {
+    html += `<div class="scheduler-row">`;
+    html += archived.map(v => {
+      const actions = `
+        <div style="margin-top:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <button class="btn-small" onclick="toggleArchive('${v.rel_path}', false)">Unarchive</button>
+          <button class="btn-danger-small" onclick="deletePublished('${v.rel_path}')">Delete</button>
+        </div>
+      `;
+      return renderVideoCard(v, actions);
+    }).join('');
+    html += `</div>`;
+  }
+  html += `</section>`;
+
+  grid.innerHTML = html;
 }
 
 async function deletePublished(relPath) {
@@ -344,9 +421,86 @@ async function deletePublished(relPath) {
   loadPublished();
 }
 
+
+/* ── Repurpose tab ───────────────────────────────────────────── */
+
+async function runRepurpose() {
+  const resultEl = document.getElementById('repurpose-result');
+  resultEl.textContent = 'Running...';
+
+  const text = (document.getElementById('repurpose-text')?.value || '').trim();
+  const platformSel = document.getElementById('repurpose-platforms');
+  const selectedPlatforms = platformSel ? Array.from(platformSel.selectedOptions).map(o => o.value) : [];
+  const platforms = (selectedPlatforms.length ? selectedPlatforms : ['blog','linkedin','newsletter','thread']).join(',');
+  const version = (document.getElementById('repurpose-version')?.value || '').trim();
+  const srcFile = document.getElementById('repurpose-file')?.files?.[0];
+  const images = document.getElementById('repurpose-images')?.files || [];
+
+  if (!text && !srcFile && images.length === 0) {
+    resultEl.textContent = 'Please provide text, or upload a source file/image(s).';
+    return;
+  }
+
+  const fd = new FormData();
+  if (text) fd.append('text_content', text);
+  fd.append('platforms', platforms);
+  if (version) fd.append('version', version);
+  fd.append('style', 'every');
+  if (srcFile) fd.append('source_file', srcFile);
+  for (const img of images) fd.append('images', img);
+
+  try {
+    const res = await fetch(`${API}/api/content-gen/upload`, { method: 'POST', body: fd });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.detail || JSON.stringify(data));
+    resultEl.textContent = JSON.stringify(data, null, 2);
+  } catch (e) {
+    resultEl.textContent = `Error: ${e.message}`;
+  }
+}
+
+
+const REPURPOSE_GUIDES = {
+  blog: `BLOG
+- Lead with clear thesis in first 2-3 sentences.
+- Keep structure: problem → insight → examples → takeaway.
+- Prefer depth and concrete examples over punchlines.`,
+  linkedin: `LINKEDIN
+- Strong opening hook in first line.
+- 1 idea per short paragraph; skimmable spacing.
+- End with one question to invite comments.`,
+  newsletter: `NEWSLETTER
+- Conversational voice + clear narrative arc.
+- Include concise section headers and practical takeaways.
+- Keep reader-oriented: why this matters now.`,
+  thread: `THREAD
+- Start with a high-contrast claim.
+- Break into short standalone points (1 idea per post).
+- Keep each line compact and momentum-driven.`
+};
+
+function updateRepurposeGuide() {
+  const p = document.getElementById('repurpose-guide-platform')?.value || 'blog';
+  const box = document.getElementById('repurpose-guide');
+  if (box) box.textContent = REPURPOSE_GUIDES[p] || '';
+}
+
+function copyRepurposeGuidePrompt() {
+  const p = document.getElementById('repurpose-guide-platform')?.value || 'blog';
+  const text = `Rewrite for ${p} using this guide:
+
+${REPURPOSE_GUIDES[p]}`;
+  navigator.clipboard.writeText(text).then(() => {
+    const r = document.getElementById('repurpose-result');
+    if (r) r.textContent = 'Copied OpenClaw guide prompt to clipboard.';
+  });
+}
+
+
 /* ── Init ─────────────────────────────────────────────────────── */
 
 document.addEventListener('DOMContentLoaded', () => {
-  switchTab('create');
+  switchTab('home');
   gotoStep(1);
+  updateRepurposeGuide();
 });
